@@ -1,0 +1,300 @@
+workflow:
+  id: enhanced-docs-generation
+  name: Enhanced Documentation Generation
+  version: 2.0
+  description: |
+    Enhanced documentation generation workflow that includes architecture analysis,
+    pattern recognition, and comprehensive documentation generation capabilities.
+  
+  phases:
+    - name: initialization
+      description: Initialize the documentation generation process
+      tasks:
+        - id: setup-project-context
+          name: Setup Project Context
+          agent: doc-engineer
+          description: Initialize project context and gather basic information
+          inputs:
+            - project_name
+            - project_description
+            - codebase_location
+          outputs:
+            - project_context
+            - initial_requirements
+    
+    - name: code-analysis
+      description: Analyze the codebase structure and patterns
+      tasks:
+        - id: scan-codebase
+          name: Scan Codebase
+          agent: code-analyst
+          description: Perform comprehensive codebase analysis
+          inputs:
+            - codebase_location
+            - project_context
+          outputs:
+            - code_structure
+            - file_organization
+            - technology_indicators
+        
+        - id: analyze-dependencies
+          name: Analyze Dependencies
+          agent: code-analyst
+          description: Analyze code dependencies and relationships
+          inputs:
+            - code_structure
+            - file_organization
+          outputs:
+            - dependency_graph
+            - import_relationships
+            - external_dependencies
+        
+        - id: identify-patterns
+          name: Identify Patterns
+          agent: pattern-recognition-expert
+          description: Identify design and architectural patterns
+          inputs:
+            - code_structure
+            - dependency_graph
+          outputs:
+            - design_patterns
+            - architectural_patterns
+            - anti_patterns
+    
+    - name: architecture-analysis
+      description: Perform comprehensive architecture analysis
+      tasks:
+        - id: analyze-architecture
+          name: Analyze Architecture
+          agent: architecture-analyst
+          description: Analyze overall system architecture
+          inputs:
+            - code_structure
+            - dependency_graph
+            - design_patterns
+            - architectural_patterns
+          outputs:
+            - architecture_style
+            - component_structure
+            - system_boundaries
+            - integration_points
+        
+        - id: identify-arch-patterns
+          name: Identify Architectural Patterns
+          agent: pattern-recognition-expert
+          description: Identify high-level architectural patterns
+          inputs:
+            - architecture_style
+            - component_structure
+            - design_patterns
+          outputs:
+            - architectural_patterns
+            - pattern_quality
+            - pattern_recommendations
+        
+        - id: assess-tech-stack
+          name: Assess Technology Stack
+          agent: tech-stack-expert
+          description: Analyze and assess technology choices
+          inputs:
+            - technology_indicators
+            - external_dependencies
+            - architecture_style
+          outputs:
+            - technology_stack
+            - tech_stack_analysis
+            - tech_recommendations
+    
+    - name: documentation-generation
+      description: Generate comprehensive documentation
+      tasks:
+        - id: generate-arch-documentation
+          name: Generate Architecture Documentation
+          agent: doc-engineer
+          description: Generate architecture documentation using templates
+          inputs:
+            - architecture_style
+            - component_structure
+            - technology_stack
+            - architectural_patterns
+          outputs:
+            - architecture_document
+            - architecture_diagrams
+        
+        - id: create-architecture-diagrams
+          name: Create Architecture Diagrams
+          agent: tech-architect
+          description: Create visual architecture diagrams
+          inputs:
+            - component_structure
+            - dependency_graph
+            - system_boundaries
+          outputs:
+            - component_diagrams
+            - dependency_diagrams
+            - system_architecture_diagrams
+        
+        - id: generate-enhanced-sequence-diagrams
+          name: Generate Enhanced Sequence Diagrams
+          agent: flow-analyst
+          description: Generate detailed sequence diagrams for complex flows
+          inputs:
+            - component_structure
+            - integration_points
+            - dependency_graph
+          outputs:
+            - sequence_diagrams
+            - flow_documentation
+        
+        - id: validate-documentation
+          name: Validate Documentation
+          agent: doc-engineer
+          description: Validate documentation quality and completeness
+          inputs:
+            - architecture_document
+            - architecture_diagrams
+            - sequence_diagrams
+          outputs:
+            - documentation_validation
+            - quality_metrics
+    
+    - name: knowledge-base-update
+      description: Update knowledge base with analysis results
+      tasks:
+        - id: update-arch-knowledge-base
+          name: Update Architecture Knowledge Base
+          agent: doc-engineer
+          description: Update knowledge base with architecture insights
+          inputs:
+            - architecture_analysis
+            - pattern_analysis
+            - tech_stack_analysis
+          outputs:
+            - knowledge_base_updates
+            - architecture_insights
+        
+        - id: record-arch-decisions
+          name: Record Architectural Decisions
+          agent: architecture-analyst
+          description: Record key architectural decisions and rationale
+          inputs:
+            - architecture_style
+            - technology_stack
+            - pattern_recommendations
+          outputs:
+            - architectural_decisions
+            - decision_rationale
+        
+        - id: generate-arch-insights
+          name: Generate Architectural Insights
+          agent: problem-solver
+          description: Generate insights and recommendations
+          inputs:
+            - architecture_analysis
+            - anti_patterns
+            - quality_metrics
+          outputs:
+            - architectural_insights
+            - improvement_recommendations
+    
+    - name: finalization
+      description: Finalize documentation and generate reports
+      tasks:
+        - id: assemble-final-documentation
+          name: Assemble Final Documentation
+          agent: doc-engineer
+          description: Assemble all documentation into final format
+          inputs:
+            - architecture_document
+            - architecture_diagrams
+            - sequence_diagrams
+            - architectural_insights
+          outputs:
+            - final_documentation
+            - documentation_index
+        
+        - id: generate-executive-summary
+          name: Generate Executive Summary
+          agent: doc-engineer
+          description: Generate executive summary of findings
+          inputs:
+            - architectural_insights
+            - quality_metrics
+            - improvement_recommendations
+          outputs:
+            - executive_summary
+            - key_findings
+
+  outputs:
+    - id: comprehensive_architecture_documentation
+      name: Comprehensive Architecture Documentation
+      description: Complete architecture documentation package
+      format: markdown
+      location: docs/architecture/
+    
+    - id: architecture_diagrams
+      name: Architecture Diagrams
+      description: Visual architecture diagrams and charts
+      format: mermaid/svg
+      location: docs/architecture/diagrams/
+    
+    - id: architectural_analysis_report
+      name: Architectural Analysis Report
+      description: Detailed architectural analysis and insights
+      format: markdown
+      location: docs/analysis/
+    
+    - id: knowledge_base_updates
+      name: Knowledge Base Updates
+      description: Updated knowledge base with architecture insights
+      format: yaml
+      location: data/architecture/
+
+  quality_gates:
+    - name: code_analysis_complete
+      description: Code analysis phase must be completed successfully
+      phase: code-analysis
+      criteria:
+        - code_structure_analyzed: true
+        - dependencies_mapped: true
+        - patterns_identified: true
+    
+    - name: architecture_analysis_complete
+      description: Architecture analysis phase must be completed successfully
+      phase: architecture-analysis
+      criteria:
+        - architecture_style_identified: true
+        - component_structure_defined: true
+        - technology_stack_assessed: true
+    
+    - name: documentation_quality_check
+      description: Documentation must meet quality standards
+      phase: documentation-generation
+      criteria:
+        - documentation_complete: true
+        - diagrams_generated: true
+        - quality_metrics_met: true
+
+  error_handling:
+    - condition: codebase_not_found
+      action: request_codebase_access
+      fallback: use_existing_documentation
+    
+    - condition: analysis_timeout
+      action: retry_with_simplified_analysis
+      fallback: generate_basic_documentation
+    
+    - condition: template_not_found
+      action: use_fallback_template
+      fallback: generate_custom_template
+
+  performance_optimizations:
+    - parallel_execution:
+        - code_analysis_tasks
+        - pattern_recognition_tasks
+    - caching:
+        - analysis_results
+        - template_rendering
+    - incremental_updates:
+        - knowledge_base
+        - documentation_sections
