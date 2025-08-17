@@ -1,0 +1,347 @@
+template:
+  id: complex-flow-analysis-template
+  name: Complex Flow Analysis Document
+  version: 1.0
+  output:
+    format: markdown
+    filename: "{{project_name}}-Complex-Flow-Analysis.md"
+    title: "{{project_name}} 复杂流程深度分析"
+
+workflow:
+  mode: interactive
+
+sections:
+  - id: initial-setup
+    instruction: |
+      This template creates detailed analysis of complex business flows identified in the Technical Overview document. Focus on flows marked as "高" (High) and "中" (Medium) importance levels.
+      
+      Prerequisites: Technical Overview document must be completed with complex flows identified.
+
+  - id: document-overview
+    title: 文档概述 (Document Overview)
+    content: |
+      本文档针对 {{project_name}} 项目技术总览中识别出的**重要程度为"高"和"中"**的复杂流程进行深度分析。每个流程包含完整的端到端调用链时序图、详细步骤分析和关键配置说明。
+
+  - id: analysis-methodology
+    title: 分析方法论 (Analysis Methodology)
+    content: |
+      **分析框架:**
+      1. **流程概述** - 业务目标、触发条件、核心问题识别
+      2. **时序图分析** - 完整的端到端调用链可视化
+      3. **关键配置** - 影响流程行为的配置项
+      4. **详细步骤** - 聚合步骤的文字说明和业务规则
+      
+      **质量标准:**
+      - 所有分析必须基于实际代码
+      - 时序图必须包含关键业务逻辑判断
+      - 配置项必须可追溯到实际配置文件
+
+  - id: high-importance-flows
+    title: 高重要性流程分析 (High Importance Flow Analysis)
+    instruction: Analyze each flow marked as "高" importance in the Technical Overview
+    repeatable: true
+    sections:
+      - id: high-flow-analysis
+        title: "流程分析: {{flow_name}}"
+        sections:
+          - id: flow-overview
+            title: 流程概述
+            instruction: Provide comprehensive overview of the business flow
+            template: |
+              **业务目标:** {{business_objective}}
+              
+              **触发条件:** {{trigger_conditions}}
+              
+              **核心复杂性:** {{core_complexity}}
+              
+              **关键非功能点:**
+              - 性能要求: {{performance_requirements}}
+              - 数据一致性: {{consistency_requirements}}
+              - 并发处理: {{concurrency_requirements}}
+              
+              **潜在核心问题:** {{potential_core_issues}}
+          
+          - id: sequence-diagram
+            title: 时序图分析
+            instruction: Create comprehensive end-to-end sequence diagram with clear stage markers (S1, S2, S3) and business logic
+            type: mermaid
+            language: sequenceDiagram
+            template: |
+              sequenceDiagram
+                  participant {{participant_1}}
+                  participant {{participant_2}}
+                  participant {{participant_3}}
+                  participant {{database}}
+                  participant {{external_service}}
+                  
+                  Note over {{participant_1}}: S1: {{stage_1_name}} - {{stage_1_description}}
+                  {{participant_1}}->>{{participant_2}}: {{action_1}}
+                  
+                  Note over {{participant_2}}: S2: {{stage_2_name}} - {{stage_2_description}}
+                  {{participant_2}}->>{{database}}: {{database_operation}} ({{operation_type}})
+                  {{database}}-->>{{participant_2}}: {{response}}
+                  
+                  alt {{business_condition}}
+                      Note over {{participant_2}}: 业务规则: {{business_rule_description}}
+                      {{participant_2}}->>{{external_service}}: {{external_call}}
+                      {{external_service}}-->>{{participant_2}}: {{external_response}}
+                  else {{alternative_condition}}
+                      Note over {{participant_2}}: 业务规则: {{alternative_business_rule}}
+                      Note over {{participant_2}}: {{alternative_action}}
+                  end
+                  
+                  Note over {{participant_2}}: S3: {{stage_3_name}} - {{stage_3_description}}
+                  {{participant_2}}-->>{{participant_1}}: {{final_response}}
+                  
+                  Note over {{participant_1}}: 流程完成 - {{completion_criteria}}
+          
+          - id: key-configurations
+            title: 关键配置项
+            instruction: List all configuration items that affect this flow behavior
+            template: |
+              **配置文件来源:**
+              
+              1. **{{config_source_1}}**
+                 - `{{config_key_1}}`: {{config_description}}
+                 - `{{config_key_2}}`: {{config_description}}
+              
+              2. **{{config_source_2}}**
+                 - `{{config_key_1}}`: {{config_description}}
+                 - `{{config_key_2}}`: {{config_description}}
+              
+              **环境变量:**
+              - `{{env_var_1}}`: {{env_description}}
+              - `{{env_var_2}}`: {{env_description}}
+              
+              **数据库配置:**
+              - `{{db_config_1}}`: {{db_description}}
+              - `{{db_config_2}}`: {{db_description}}
+          
+          - id: detailed-steps
+            title: 详细步骤分析
+            instruction: Provide detailed explanation of each aggregated step from sequence diagram
+            template: |
+              **S1: {{step_1_name}}**
+              - **作用:** {{step_1_purpose}}
+              - **核心业务规则:** {{step_1_business_rules}}
+              - **关键逻辑:** `{{step_1_code_logic}}`
+              - **异常处理:** {{step_1_exception_handling}}
+              
+              **S2: {{step_2_name}}**
+              - **作用:** {{step_2_purpose}}
+              - **核心业务规则:** {{step_2_business_rules}}
+              - **关键逻辑:** `{{step_2_code_logic}}`
+              - **数据操作:** {{step_2_data_operations}}
+              
+              **S3: {{step_3_name}}**
+              - **作用:** {{step_3_purpose}}
+              - **核心业务规则:** {{step_3_business_rules}}
+              - **关键逻辑:** `{{step_3_code_logic}}`
+              - **响应处理:** {{step_3_response_handling}}
+          
+          - id: performance-analysis
+            title: 性能分析
+            instruction: Analyze performance characteristics and bottlenecks
+            template: |
+              **性能特征:**
+              - 平均响应时间: {{avg_response_time}}
+              - 并发处理能力: {{concurrency_capacity}}
+              - 资源消耗: {{resource_consumption}}
+              
+              **潜在瓶颈:**
+              1. {{bottleneck_1}}: {{bottleneck_description}}
+              2. {{bottleneck_2}}: {{bottleneck_description}}
+              
+              **优化建议:**
+              - {{optimization_1}}
+              - {{optimization_2}}
+
+  - id: medium-importance-flows
+    title: 中重要性流程分析 (Medium Importance Flow Analysis)
+    instruction: Analyze each flow marked as "中" importance in the Technical Overview
+    repeatable: true
+    sections:
+      - id: medium-flow-analysis
+        title: "流程分析: {{flow_name}}"
+        sections:
+          - id: flow-overview
+            title: 流程概述
+            template: |
+              **业务目标:** {{business_objective}}
+              **触发条件:** {{trigger_conditions}}
+              **核心复杂性:** {{core_complexity}}
+              **潜在核心问题:** {{potential_core_issues}}
+          
+          - id: sequence-diagram
+            title: 时序图分析
+            type: mermaid
+            language: sequenceDiagram
+            template: |
+              sequenceDiagram
+                  participant {{participant_1}}
+                  participant {{participant_2}}
+                  participant {{participant_3}}
+                  
+                  Note over {{participant_1}}: S1: {{step_1_description}}
+                  {{participant_1}}->>{{participant_2}}: {{action_1}}
+                  
+                  Note over {{participant_2}}: S2: {{step_2_description}}
+                  {{participant_2}}-->>{{participant_1}}: {{response}}
+          
+          - id: key-configurations
+            title: 关键配置项
+            template: |
+              **主要配置:**
+              - {{config_item_1}}: {{config_description}}
+              - {{config_item_2}}: {{config_description}}
+          
+          - id: detailed-steps
+            title: 详细步骤分析
+            instruction: Provide detailed analysis of each stage with business rules and key logic
+            template: |
+              **聚合步骤详细分析:**
+              
+              **S1: {{stage_1_name}} - {{stage_1_description}}**
+              - **关键作用**: {{stage_1_purpose}}
+              - **核心业务规则**: {{stage_1_business_rule}}
+              - **关键逻辑判断**: `{{stage_1_logic_code}}`
+              - **配置依赖**: {{stage_1_config_dependency}}
+              - **性能影响**: {{stage_1_performance_impact}}
+              
+              **S2: {{stage_2_name}} - {{stage_2_description}}**
+              - **关键作用**: {{stage_2_purpose}}
+              - **核心业务规则**: {{stage_2_business_rule}}
+              - **关键逻辑判断**: `{{stage_2_logic_code}}`
+              - **数据库操作**: {{stage_2_database_operation}}
+              - **外部调用**: {{stage_2_external_call}}
+              - **错误处理**: {{stage_2_error_handling}}
+              
+              **S3: {{stage_3_name}} - {{stage_3_description}}**
+              - **关键作用**: {{stage_3_purpose}}
+              - **核心业务规则**: {{stage_3_business_rule}}
+              - **关键逻辑判断**: `{{stage_3_logic_code}}`
+              - **完成条件**: {{stage_3_completion_criteria}}
+              - **状态更新**: {{stage_3_state_update}}
+              
+              **业务规则总结:**
+              - **数据验证规则**: {{data_validation_rules}}
+              - **权限控制规则**: {{permission_rules}}
+              - **状态转换规则**: {{state_transition_rules}}
+              - **异常处理规则**: {{exception_handling_rules}}
+
+  - id: cross-flow-analysis
+    title: 跨流程关联分析 (Cross-Flow Correlation Analysis)
+    instruction: Analyze relationships and dependencies between different flows
+    sections:
+      - id: flow-dependencies
+        title: 流程依赖关系
+        instruction: Create dependency graph between analyzed flows
+        type: mermaid
+        language: graph
+        template: |
+          graph TD
+              A[{{flow_1}}] --> B[{{flow_2}}]
+              A --> C[{{flow_3}}]
+              B --> D[{{shared_component}}]
+              C --> D
+              D --> E[{{downstream_flow}}]
+              
+              style A fill:#ffebee
+              style B fill:#e8f5e8
+              style C fill:#e8f5e8
+              style D fill:#fff3e0
+      
+      - id: shared-components
+        title: 共享组件分析
+        template: |
+          **共享数据库表:**
+          - {{shared_table_1}}: 被 {{flow_list}} 流程使用
+          - {{shared_table_2}}: 被 {{flow_list}} 流程使用
+          
+          **共享服务组件:**
+          - {{shared_service_1}}: {{service_description}}
+          - {{shared_service_2}}: {{service_description}}
+          
+          **配置依赖:**
+          - {{shared_config}}: 影响多个流程的关键配置
+      
+      - id: cascading-effects
+        title: 级联影响分析
+        template: |
+          **潜在级联风险:**
+          
+          1. **{{risk_scenario_1}}**
+             - 触发条件: {{trigger_condition}}
+             - 影响流程: {{affected_flows}}
+             - 影响范围: {{impact_scope}}
+          
+          2. **{{risk_scenario_2}}**
+             - 触发条件: {{trigger_condition}}
+             - 影响流程: {{affected_flows}}
+             - 影响范围: {{impact_scope}}
+
+  - id: summary-insights
+    title: 总结与洞察 (Summary & Insights)
+    sections:
+      - id: complexity-summary
+        title: 复杂性总结
+        template: |
+          **系统复杂性特征:**
+          - 最复杂流程: {{most_complex_flow}}
+          - 关键风险点: {{key_risk_points}}
+          - 架构优势: {{architectural_strengths}}
+          - 改进机会: {{improvement_opportunities}}
+      
+      - id: maintenance-recommendations
+        title: 维护建议
+        template: |
+          **优先级维护建议:**
+          
+          1. **高优先级**
+             - {{high_priority_recommendation}}
+          
+          2. **中优先级**
+             - {{medium_priority_recommendation}}
+          
+          3. **长期改进**
+             - {{long_term_improvement}}
+      
+      - id: monitoring-recommendations
+        title: 监控建议
+        template: |
+          **关键监控指标:**
+          - {{monitoring_metric_1}}: {{metric_description}}
+          - {{monitoring_metric_2}}: {{metric_description}}
+          
+          **告警阈值建议:**
+          - {{alert_metric_1}}: {{threshold_value}}
+          - {{alert_metric_2}}: {{threshold_value}}
+
+  - id: appendices
+    title: 附录 (Appendices)
+    sections:
+      - id: function-reference
+        title: 关键函数参考
+        type: table
+        template: |
+          | 函数名 | 所在文件 | 功能说明 | 关键参数 |
+          |--------|----------|----------|----------|
+          | {{function_name}} | {{file_path}} | {{description}} | {{parameters}} |
+      
+      - id: configuration-reference
+        title: 完整配置参考
+        template: |
+          **配置文件索引:**
+          
+          ```yaml
+          # {{config_file_name}}
+          {{config_content_sample}}
+          ```
+      
+      - id: change-log
+        title: 文档变更记录
+        type: table
+        template: |
+          | 日期 | 版本 | 变更说明 | 作者 |
+          |------|------|----------|------|
+          | {{date}} | {{version}} | {{changes}} | {{author}} |

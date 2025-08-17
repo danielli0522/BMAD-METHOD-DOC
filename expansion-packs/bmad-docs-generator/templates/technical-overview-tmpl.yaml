@@ -1,0 +1,285 @@
+template:
+  id: technical-overview-template
+  name: Technical Overview Document
+  version: 1.0
+  output:
+    format: markdown
+    filename: "{{project_name}}-Technical-Overview.md"
+    title: "{{project_name}} Technical Overview"
+
+workflow:
+  mode: interactive
+
+sections:
+  - id: initial-setup
+    instruction: |
+      This template creates a comprehensive technical overview document that enables engineers to understand and maintain the project within 3 days. The document must be strictly based on actual code analysis.
+      
+      Prerequisites: Ensure codebase analysis has been completed by Code Analyst agent.
+
+  - id: project-overview
+    title: 项目概述 (Project Overview)
+    instruction: Establish the project context and core value proposition. Apply `tasks#advanced-elicitation` protocol after presenting this section.
+    sections:
+      - id: project-background
+        title: 项目背景与使命 (Project Background & Mission)
+        instruction: Explain why this project exists and its core value based on code analysis and documentation
+        template: |
+          **项目使命:** {{project_mission}}
+          
+          **核心价值:** {{core_value_proposition}}
+          
+          **解决的问题:** {{problems_solved}}
+      
+      - id: user-roles-scenarios
+        title: 主要用户角色与场景 (Main User Roles & Scenarios)
+        instruction: Describe who uses this system and how, based on API analysis and user interface discovery
+        template: |
+          **主要用户角色:**
+          
+          1. **{{user_role_1}}** - {{role_description}}
+             - 使用场景: {{usage_scenarios}}
+             - 核心功能: {{core_functions}}
+          
+          2. **{{user_role_2}}** - {{role_description}}
+             - 使用场景: {{usage_scenarios}}
+             - 核心功能: {{core_functions}}
+
+  - id: technology-stack
+    title: 技术栈详解 (Technology Stack Analysis)
+    instruction: Present comprehensive technology inventory in structured format
+    sections:
+      - id: tech-stack-overview
+        title: 技术组件清单 (Technology Components Inventory)
+        instruction: Create detailed table of all technology components discovered during analysis
+        type: table
+        template: |
+          | 类别 | 技术/框架 | 版本 | 用途说明 | 关键配置 |
+          |------|----------|------|----------|----------|
+          | **前端框架** | {{frontend_framework}} | {{version}} | {{purpose}} | {{key_config}} |
+          | **后端语言** | {{backend_language}} | {{version}} | {{purpose}} | {{key_config}} |
+          | **Web框架** | {{web_framework}} | {{version}} | {{purpose}} | {{key_config}} |
+          | **数据库** | {{database}} | {{version}} | {{purpose}} | {{key_config}} |
+          | **缓存** | {{cache_system}} | {{version}} | {{purpose}} | {{key_config}} |
+          | **消息队列** | {{message_queue}} | {{version}} | {{purpose}} | {{key_config}} |
+          | **容器化** | {{containerization}} | {{version}} | {{purpose}} | {{key_config}} |
+          | **CI/CD** | {{cicd_tools}} | {{version}} | {{purpose}} | {{key_config}} |
+
+  - id: architecture-analysis
+    title: 架构五视图分析 (Five-View Architecture Analysis)
+    instruction: Generate comprehensive architecture analysis using Mermaid diagrams and detailed explanations
+    sections:
+      - id: logical-view
+        title: 逻辑视图 (Logical View)
+        instruction: Create logical architecture diagram and explain request flow
+        sections:
+          - id: logical-diagram
+            title: 功能模块关系图
+            type: mermaid
+            language: graph
+            template: |
+              graph TD
+                  A[{{entry_point}}] --> B[{{api_layer}}]
+                  B --> C[{{business_layer}}]
+                  C --> D[{{data_layer}}]
+                  B --> E[{{external_services}}]
+                  C --> F[{{middleware}}]
+                  
+                  style A fill:#e1f5fe
+                  style B fill:#f3e5f5
+                  style C fill:#e8f5e8
+                  style D fill:#fff3e0
+          
+          - id: logical-explanation
+            title: 请求处理流程说明
+            instruction: Explain how a typical request flows through the system
+            template: |
+              **典型请求处理流程:**
+              
+              1. **入口点 ({{entry_point}})**: {{entry_explanation}}
+              2. **API层 ({{api_layer}})**: {{api_explanation}}
+              3. **业务层 ({{business_layer}})**: {{business_explanation}}
+              4. **数据层 ({{data_layer}})**: {{data_explanation}}
+              
+              **关键依赖:**
+              - {{dependency_1}}: {{dependency_explanation}}
+              - {{dependency_2}}: {{dependency_explanation}}
+
+      - id: development-view
+        title: 开发视图 (Development View)
+        instruction: Map code structure and module dependencies
+        sections:
+          - id: development-diagram
+            title: 代码模块依赖图
+            type: mermaid
+            language: graph
+            template: |
+              graph LR
+                  A[{{core_module}}] --> B[{{business_module_1}}]
+                  A --> C[{{business_module_2}}]
+                  B --> D[{{common_module}}]
+                  C --> D
+                  D --> E[{{util_module}}]
+                  
+                  style A fill:#ffebee
+                  style B fill:#e8f5e8
+                  style C fill:#e8f5e8
+                  style D fill:#f3e5f5
+          
+          - id: development-explanation
+            title: 模块化设计说明
+            template: |
+              **目录结构分析:**
+              ```
+              {{project_structure}}
+              ```
+              
+              **关键模块职责:**
+              - **{{module_1}}**: {{module_responsibility}}
+              - **{{module_2}}**: {{module_responsibility}}
+              
+              **第三方库清单:**
+              - {{library_1}}: {{library_purpose}}
+              - {{library_2}}: {{library_purpose}}
+
+      - id: deployment-view
+        title: 部署视图 (Deployment View)
+        instruction: Create deployment topology diagram
+        sections:
+          - id: deployment-diagram
+            title: 部署拓扑图
+            type: mermaid
+            language: graph
+            template: |
+              graph TB
+                  subgraph "应用服务器"
+                      A[{{app_server}}]
+                      B[{{web_server}}]
+                  end
+                  
+                  subgraph "数据层"
+                      C[{{database}}]
+                      D[{{cache}}]
+                  end
+                  
+                  subgraph "外部服务"
+                      E[{{external_service_1}}]
+                      F[{{external_service_2}}]
+                  end
+                  
+                  A --> C
+                  A --> D
+                  B --> A
+                  A --> E
+                  A --> F
+
+      - id: runtime-view
+        title: 运行视图 (Runtime View)
+        instruction: Document runtime behavior and concurrency model
+        sections:
+          - id: runtime-diagram
+            title: 运行时架构图
+            type: mermaid
+            language: graph
+            template: |
+              graph TD
+                  A[{{main_process}}] --> B[{{worker_process_1}}]
+                  A --> C[{{worker_process_2}}]
+                  B --> D[{{message_queue}}]
+                  C --> D
+                  D --> E[{{background_processor}}]
+                  
+                  style A fill:#e3f2fd
+                  style B fill:#f1f8e9
+                  style C fill:#f1f8e9
+                  style D fill:#fff3e0
+          
+          - id: runtime-explanation
+            title: 并发模型说明
+            template: |
+              **进程/线程模型:**
+              - {{process_description}}
+              
+              **异步处理机制:**
+              - {{async_mechanism}}
+              
+              **性能特征:**
+              - {{performance_characteristics}}
+
+      - id: data-view
+        title: 数据视图 (Data View)
+        instruction: Create entity relationship diagram and data flow analysis
+        sections:
+          - id: data-diagram
+            title: 核心数据模型 E-R 图
+            type: mermaid
+            language: erDiagram
+            template: |
+              {{entity_1}} {
+                  {{field_type}} {{field_name}}
+                  {{field_type}} {{field_name}}
+              }
+              
+              {{entity_2}} {
+                  {{field_type}} {{field_name}}
+                  {{field_type}} {{field_name}}
+              }
+              
+              {{entity_1}} ||--o{ {{entity_2}} : "{{relationship}}"
+          
+          - id: data-explanation
+            title: 数据表结构说明
+            template: |
+              **核心数据表:**
+              
+              1. **{{table_1}}**
+                 - {{field_1}} ({{type}}): {{purpose}}
+                 - {{field_2}} ({{type}}): {{purpose}}
+              
+              2. **{{table_2}}**
+                 - {{field_1}} ({{type}}): {{purpose}}
+                 - {{field_2}} ({{type}}): {{purpose}}
+
+  - id: complex-flows-identification
+    title: 核心复杂流程识别表 (Core Complex Flows Identification)
+    instruction: Generate comprehensive table of identified complex flows from code analysis
+    type: table
+    template: |
+      | 序号 | 流程名称 | 流程入口函数 | 核心复杂性解释 | 潜在问题 | 重要程度 |
+      |------|----------|--------------|----------------|----------|----------|
+      | 1 | {{flow_name}} | {{entry_function}} | {{complexity_explanation}} | {{potential_issues}} | {{importance_level}} |
+      | 2 | {{flow_name}} | {{entry_function}} | {{complexity_explanation}} | {{potential_issues}} | {{importance_level}} |
+      | 3 | {{flow_name}} | {{entry_function}} | {{complexity_explanation}} | {{potential_issues}} | {{importance_level}} |
+      | ... | ... | ... | ... | ... | ... |
+
+  - id: appendices
+    title: 附录 (Appendices)
+    sections:
+      - id: configuration-reference
+        title: 关键配置参考
+        instruction: Document critical configuration files and parameters
+        template: |
+          **配置文件清单:**
+          - {{config_file_1}}: {{purpose}}
+          - {{config_file_2}}: {{purpose}}
+          
+          **环境变量:**
+          - {{env_var_1}}: {{description}}
+          - {{env_var_2}}: {{description}}
+      
+      - id: api-endpoints
+        title: 核心 API 端点
+        instruction: List discovered API endpoints and their purposes
+        type: table
+        template: |
+          | 端点 | 方法 | 功能说明 | 参数 |
+          |------|------|----------|------|
+          | {{endpoint}} | {{method}} | {{description}} | {{parameters}} |
+      
+      - id: change-log
+        title: 文档变更记录
+        type: table
+        template: |
+          | 日期 | 版本 | 变更说明 | 作者 |
+          |------|------|----------|------|
+          | {{date}} | {{version}} | {{changes}} | {{author}} |

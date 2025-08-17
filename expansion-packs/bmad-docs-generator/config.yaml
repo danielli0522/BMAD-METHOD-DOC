@@ -1,0 +1,10 @@
+name: bmad-docs-generator
+version: 1.0.0
+short-title: Documentation Generator Pack
+description: >-
+  AI-driven codebase analysis and technical documentation generation pack.
+  Transforms any complex codebase into comprehensive technical documentation 
+  including technical overview, complex flow analysis, and problem diagnosis.
+  Enables engineers to understand and maintain projects within 3 days.
+author: BMad Community
+slashPrefix: bmadDocs

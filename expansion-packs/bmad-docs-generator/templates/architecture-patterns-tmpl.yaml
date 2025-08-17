@@ -1,0 +1,336 @@
+template:
+  id: architecture-patterns-template-v1
+  name: Architecture Patterns Analysis Document
+  version: 1.0
+  output:
+    format: markdown
+    filename: "{{project_name}}-architecture-patterns.md"
+    title: "{{project_name}} Architecture Patterns Analysis"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: Introduction
+    instruction: |
+      Create an introduction that explains the purpose of this architecture patterns analysis and how it will help understand the system's design decisions and structure.
+    elicit: true
+    content: |
+      This document provides a comprehensive analysis of the architectural patterns used in {{project_name}}, identifying both intentional design patterns and emergent structures that have evolved over time. Understanding these patterns is crucial for maintaining, extending, and optimizing the system.
+
+      The analysis covers:
+      - **Intentional Patterns**: Deliberately implemented architectural patterns
+      - **Emergent Patterns**: Structures that have evolved organically
+      - **Anti-Patterns**: Problematic patterns that should be addressed
+      - **Pattern Interactions**: How different patterns work together
+
+  - id: pattern-categories
+    title: Pattern Categories
+    instruction: |
+      Define the categories of patterns we'll analyze. This should include both high-level architectural patterns and lower-level design patterns.
+    elicit: true
+    sections:
+      - id: architectural-patterns
+        title: Architectural Patterns
+        instruction: |
+          Identify and analyze high-level architectural patterns such as:
+          - Layered Architecture
+          - Microservices
+          - Event-Driven Architecture
+          - CQRS
+          - Domain-Driven Design
+          - Hexagonal Architecture
+          - Clean Architecture
+          
+          For each pattern found, provide:
+          - Pattern name and description
+          - Implementation evidence (file paths, code examples)
+          - Benefits and trade-offs
+          - Usage scope and boundaries
+        template: |
+          ## {{pattern_name}}
+          
+          **Description**: {{pattern_description}}
+          
+          **Evidence**: 
+          - Files: {{evidence_files}}
+          - Code examples: {{code_examples}}
+          
+          **Benefits**: {{benefits}}
+          
+          **Trade-offs**: {{trade_offs}}
+          
+          **Scope**: {{usage_scope}}
+
+      - id: design-patterns
+        title: Design Patterns
+        instruction: |
+          Identify and analyze common design patterns such as:
+          - Factory Pattern
+          - Observer Pattern
+          - Strategy Pattern
+          - Repository Pattern
+          - Dependency Injection
+          - Builder Pattern
+          - Adapter Pattern
+          
+          Focus on patterns that are clearly implemented and have significant impact on the codebase.
+        template: |
+          ## {{pattern_name}}
+          
+          **Purpose**: {{pattern_purpose}}
+          
+          **Implementation**: {{implementation_details}}
+          
+          **Usage**: {{usage_context}}
+          
+          **Impact**: {{impact_assessment}}
+
+      - id: organizational-patterns
+        title: Organizational Patterns
+        instruction: |
+          Analyze how the codebase is organized and structured:
+          - Directory structure patterns
+          - Module organization
+          - Package/namespace patterns
+          - File naming conventions
+          - Separation of concerns
+          
+          These patterns often reflect the team's mental model and development practices.
+        template: |
+          ## {{pattern_name}}
+          
+          **Structure**: {{structure_description}}
+          
+          **Rationale**: {{rationale}}
+          
+          **Benefits**: {{benefits}}
+          
+          **Challenges**: {{challenges}}
+
+  - id: pattern-analysis
+    title: Detailed Pattern Analysis
+    instruction: |
+      Provide detailed analysis of the most important patterns found in the codebase. This should be the core of the document.
+    elicit: true
+    sections:
+      - id: primary-architectural-pattern
+        title: Primary Architectural Pattern
+        instruction: |
+          Identify and analyze the dominant architectural pattern in the system. This is usually the pattern that most influences the overall structure and design decisions.
+          
+          Provide:
+          - Clear evidence of the pattern's implementation
+          - Analysis of how well it's implemented
+          - Assessment of its suitability for the project's goals
+          - Recommendations for improvement if needed
+        template: |
+          ## {{pattern_name}} - Primary Architecture
+          
+          **Implementation Quality**: {{quality_assessment}}
+          
+          **Evidence**:
+          {{evidence_details}}
+          
+          **Strengths**:
+          {{strengths_list}}
+          
+          **Weaknesses**:
+          {{weaknesses_list}}
+          
+          **Recommendations**:
+          {{recommendations}}
+
+      - id: pattern-interactions
+        title: Pattern Interactions
+        instruction: |
+          Analyze how different patterns interact and work together in the system. This includes:
+          - How architectural patterns support each other
+          - Potential conflicts between patterns
+          - Synergies and complementary relationships
+          - Integration points and boundaries
+        template: |
+          ## Pattern Interactions
+          
+          **Synergistic Patterns**:
+          {{synergistic_patterns}}
+          
+          **Potential Conflicts**:
+          {{conflict_patterns}}
+          
+          **Integration Points**:
+          {{integration_points}}
+          
+          **Boundary Definitions**:
+          {{boundary_definitions}}
+
+      - id: anti-patterns
+        title: Anti-Patterns and Issues
+        instruction: |
+          Identify problematic patterns and architectural issues:
+          - Code smells and anti-patterns
+          - Architectural violations
+          - Performance bottlenecks
+          - Maintainability issues
+          - Security concerns
+          
+          For each issue, provide:
+          - Clear description of the problem
+          - Evidence of its existence
+          - Impact assessment
+          - Recommended solutions
+        template: |
+          ## {{anti_pattern_name}}
+          
+          **Problem Description**: {{problem_description}}
+          
+          **Evidence**: {{evidence}}
+          
+          **Impact**: {{impact_assessment}}
+          
+          **Root Cause**: {{root_cause}}
+          
+          **Recommended Solution**: {{solution}}
+
+  - id: pattern-evolution
+    title: Pattern Evolution and History
+    instruction: |
+      Analyze how patterns have evolved over time in the codebase:
+      - Historical pattern changes
+      - Migration patterns
+      - Legacy code patterns
+      - Technical debt related to patterns
+      
+      This helps understand the system's evolution and future direction.
+    elicit: true
+    template: |
+      ## Pattern Evolution
+      
+      **Historical Changes**:
+      {{historical_changes}}
+      
+      **Migration Patterns**:
+      {{migration_patterns}}
+      
+      **Legacy Patterns**:
+      {{legacy_patterns}}
+      
+      **Technical Debt**:
+      {{technical_debt}}
+
+  - id: recommendations
+    title: Recommendations and Roadmap
+    instruction: |
+      Provide actionable recommendations for improving the architectural patterns:
+      - Short-term improvements
+      - Medium-term refactoring
+      - Long-term architectural goals
+      - Migration strategies
+      - Risk mitigation
+    elicit: true
+    sections:
+      - id: short-term-improvements
+        title: Short-term Improvements
+        instruction: |
+          Identify quick wins and low-risk improvements that can be implemented immediately:
+          - Code cleanup opportunities
+          - Minor refactoring
+          - Documentation improvements
+          - Testing enhancements
+        template: |
+          ## Short-term Improvements
+          
+          **Priority 1 (Critical)**:
+          {{critical_improvements}}
+          
+          **Priority 2 (Important)**:
+          {{important_improvements}}
+          
+          **Priority 3 (Nice to have)**:
+          {{nice_to_have_improvements}}
+
+      - id: medium-term-refactoring
+        title: Medium-term Refactoring
+        instruction: |
+          Plan for medium-term architectural improvements:
+          - Pattern consolidation
+          - Interface improvements
+          - Performance optimizations
+          - Maintainability enhancements
+        template: |
+          ## Medium-term Refactoring
+          
+          **Pattern Consolidation**:
+          {{pattern_consolidation}}
+          
+          **Interface Improvements**:
+          {{interface_improvements}}
+          
+          **Performance Optimizations**:
+          {{performance_optimizations}}
+
+      - id: long-term-goals
+        title: Long-term Architectural Goals
+        instruction: |
+          Define long-term architectural vision and goals:
+          - Target architecture
+          - Technology evolution
+          - Scalability improvements
+          - Innovation opportunities
+        template: |
+          ## Long-term Architectural Goals
+          
+          **Target Architecture**:
+          {{target_architecture}}
+          
+          **Technology Evolution**:
+          {{technology_evolution}}
+          
+          **Scalability Improvements**:
+          {{scalability_improvements}}
+
+  - id: conclusion
+    title: Conclusion
+    instruction: |
+      Summarize the key findings and insights from the pattern analysis:
+      - Overall architectural health
+      - Key strengths and weaknesses
+      - Strategic recommendations
+      - Next steps
+    elicit: true
+    template: |
+      ## Conclusion
+      
+      **Architectural Health**: {{health_assessment}}
+      
+      **Key Strengths**: {{key_strengths}}
+      
+      **Key Weaknesses**: {{key_weaknesses}}
+      
+      **Strategic Recommendations**: {{strategic_recommendations}}
+      
+      **Next Steps**: {{next_steps}}
+
+## Elicitation Methods
+
+When `elicit: true` is encountered, use the following elicitation methods from bmad-core:
+
+1. **Expand or Contract for Audience** - Adjust pattern analysis depth based on audience needs
+2. **Explain Reasoning (CoT Step-by-Step)** - Walk through pattern identification process
+3. **Critique and Refine** - Review pattern analysis for accuracy and completeness
+4. **Analyze Logical Flow and Dependencies** - Examine pattern relationships and dependencies
+5. **Assess Alignment with Overall Goals** - Evaluate patterns against project objectives
+6. **Identify Potential Risks and Unforeseen Issues** - Anticipate pattern-related problems
+7. **Challenge from Critical Perspective** - Question pattern choices and implementations
+8. **Tree of Thoughts Deep Dive** - Explore multiple pattern analysis approaches
+9. **Agile Team Perspective Shift** - Consider patterns from different stakeholder viewpoints
+
+## Quality Standards
+
+- **Evidence-Based**: Every pattern must be backed by specific code evidence
+- **Comprehensive**: Cover all significant patterns in the codebase
+- **Actionable**: Provide clear recommendations for improvement
+- **Balanced**: Present both strengths and weaknesses of each pattern
+- **Contextual**: Relate patterns to project goals and constraints

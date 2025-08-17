@@ -1,0 +1,414 @@
+template:
+  id: problem-diagnosis-template
+  name: Problem Diagnosis & Solution Document
+  version: 1.0
+  output:
+    format: markdown
+    filename: "{{project_name}}-Problem-Diagnosis-Solution.md"
+    title: "{{project_name}} 问题诊断与快速解决方案"
+
+workflow:
+  mode: interactive
+
+sections:
+  - id: initial-setup
+    instruction: |
+      This template creates comprehensive problem diagnosis and solution documentation based on the Complex Flow Analysis. Focus on predicting potential problems and providing actionable solutions for each analyzed flow.
+      
+      Prerequisites: Complex Flow Analysis document must be completed with detailed flow analysis.
+
+  - id: document-overview
+    title: 文档概述 (Document Overview)
+    content: |
+      本文档基于《{{project_name}}-Complex-Flow-Analysis.md》的分析结论，为每个核心流程预测可能出现的用户侧或系统侧问题，并提供具体的解决方案。文档采用系统可靠性工程(SRE)的视角，帮助工程师快速定位和解决生产环境问题。
+
+  - id: diagnosis-methodology
+    title: 诊断方法论 (Diagnosis Methodology)
+    content: |
+      **问题分类框架:**
+      - **用户侧问题**: 用户直接感知的功能异常或性能问题
+      - **系统侧问题**: 底层技术故障导致的系统不可用
+      - **性能问题**: 响应时间、吞吐量、资源使用相关问题
+      - **数据问题**: 数据一致性、完整性、准确性问题
+      
+      **解决方案原则:**
+      - 快速定位: 提供明确的排查步骤
+      - 根本解决: 针对根本原因而非症状
+      - 预防措施: 避免问题再次发生
+      - 监控改进: 提升问题发现能力
+
+  - id: high-priority-flow-problems
+    title: 高优先级流程问题诊断 (High Priority Flow Problem Diagnosis)
+    instruction: For each high-importance flow, predict problems and provide solutions
+    repeatable: true
+    sections:
+      - id: flow-problem-analysis
+        title: "{{flow_name}} 流程问题诊断"
+        sections:
+          - id: user-facing-problems
+            title: 用户侧问题
+            type: table
+            template: |
+              | 序号 | 潜在问题现象 (用户视角) | 技术层面的根本原因 | 解决方案 |
+              |------|---------------------|-------------------|----------|
+              | 1 | {{user_symptom_1}} | {{technical_root_cause_1}} | {{solution_1}} |
+              | 2 | {{user_symptom_2}} | {{technical_root_cause_2}} | {{solution_2}} |
+              | 3 | {{user_symptom_3}} | {{technical_root_cause_3}} | {{solution_3}} |
+          
+          - id: system-problems
+            title: 系统侧问题
+            type: table
+            template: |
+              | 序号 | 潜在问题现象 (系统视角) | 技术层面的根本原因 | 解决方案 |
+              |------|----------------------|-------------------|----------|
+              | 1 | {{system_symptom_1}} | {{technical_root_cause_1}} | {{solution_1}} |
+              | 2 | {{system_symptom_2}} | {{technical_root_cause_2}} | {{solution_2}} |
+              | 3 | {{system_symptom_3}} | {{technical_root_cause_3}} | {{solution_3}} |
+          
+          - id: performance-problems
+            title: 性能问题
+            type: table
+            template: |
+              | 序号 | 潜在问题现象 (性能视角) | 技术层面的根本原因 | 解决方案 |
+              |------|----------------------|-------------------|----------|
+              | 1 | {{performance_symptom_1}} | {{technical_root_cause_1}} | {{solution_1}} |
+              | 2 | {{performance_symptom_2}} | {{technical_root_cause_2}} | {{solution_2}} |
+          
+          - id: data-consistency-problems
+            title: 数据一致性问题
+            type: table
+            template: |
+              | 序号 | 潜在问题现象 (数据视角) | 技术层面的根本原因 | 解决方案 |
+              |------|----------------------|-------------------|----------|
+              | 1 | {{data_symptom_1}} | {{technical_root_cause_1}} | {{solution_1}} |
+              | 2 | {{data_symptom_2}} | {{technical_root_cause_2}} | {{solution_2}} |
+          
+          - id: quick-diagnosis-guide
+            title: 快速诊断指南
+            template: |
+              **故障排查步骤:**
+              
+              1. **初步检查**
+                 ```bash
+                 # 检查服务状态
+                 {{health_check_command}}
+                 
+                 # 检查关键日志
+                 {{log_check_command}}
+                 ```
+              
+              2. **深度诊断**
+                 ```bash
+                 # 性能指标检查
+                 {{performance_check_command}}
+                 
+                 # 数据库连接检查
+                 {{db_check_command}}
+                 ```
+              
+              3. **配置验证**
+                 - 检查配置文件: `{{config_file_path}}`
+                 - 验证环境变量: `{{env_vars_to_check}}`
+                 - 确认依赖服务: `{{dependency_services}}`
+
+  - id: medium-priority-flow-problems
+    title: 中优先级流程问题诊断 (Medium Priority Flow Problem Diagnosis)
+    instruction: For each medium-importance flow, predict problems and provide solutions
+    repeatable: true
+    sections:
+      - id: medium-flow-problem-analysis
+        title: "{{flow_name}} 流程问题诊断"
+        sections:
+          - id: common-problems
+            title: 常见问题
+            type: table
+            template: |
+              | 序号 | 潜在问题现象 | 技术层面的根本原因 | 解决方案 |
+              |------|-------------|-------------------|----------|
+              | 1 | {{problem_symptom_1}} | {{technical_root_cause_1}} | {{solution_1}} |
+              | 2 | {{problem_symptom_2}} | {{technical_root_cause_2}} | {{solution_2}} |
+          
+          - id: diagnosis-checklist
+            title: 诊断检查清单
+            template: |
+              **快速检查项:**
+              - [ ] {{check_item_1}}
+              - [ ] {{check_item_2}}
+              - [ ] {{check_item_3}}
+              
+              **深度排查项:**
+              - [ ] {{deep_check_item_1}}
+              - [ ] {{deep_check_item_2}}
+
+  - id: cross-system-problems
+    title: 跨系统问题诊断 (Cross-System Problem Diagnosis)
+    instruction: Analyze problems that affect multiple flows or system components
+    sections:
+      - id: cascade-failure-scenarios
+        title: 级联故障场景
+        sections:
+          - id: database-failure
+            title: 数据库故障场景
+            type: table
+            template: |
+              | 序号 | 故障现象 | 影响范围 | 根本原因 | 解决方案 |
+              |------|----------|----------|----------|----------|
+              | 1 | {{db_failure_symptom_1}} | {{affected_flows_1}} | {{root_cause_1}} | {{solution_1}} |
+              | 2 | {{db_failure_symptom_2}} | {{affected_flows_2}} | {{root_cause_2}} | {{solution_2}} |
+          
+          - id: network-failure
+            title: 网络故障场景
+            type: table
+            template: |
+              | 序号 | 故障现象 | 影响范围 | 根本原因 | 解决方案 |
+              |------|----------|----------|----------|----------|
+              | 1 | {{network_failure_symptom_1}} | {{affected_components_1}} | {{root_cause_1}} | {{solution_1}} |
+              | 2 | {{network_failure_symptom_2}} | {{affected_components_2}} | {{root_cause_2}} | {{solution_2}} |
+          
+          - id: resource-exhaustion
+            title: 资源耗尽场景
+            type: table
+            template: |
+              | 序号 | 故障现象 | 影响范围 | 根本原因 | 解决方案 |
+              |------|----------|----------|----------|----------|
+              | 1 | {{resource_exhaustion_symptom_1}} | {{affected_systems_1}} | {{root_cause_1}} | {{solution_1}} |
+              | 2 | {{resource_exhaustion_symptom_2}} | {{affected_systems_2}} | {{root_cause_2}} | {{solution_2}} |
+
+  - id: monitoring-alerting
+    title: 监控与告警建议 (Monitoring & Alerting Recommendations)
+    sections:
+      - id: critical-metrics
+        title: 关键监控指标
+        template: |
+          **应用层监控:**
+          
+          | 指标类别 | 监控指标 | 告警阈值 | 监控频率 | 责任团队 |
+          |----------|----------|----------|----------|----------|
+          | 响应时间 | {{response_time_metric}} | {{threshold}} | {{frequency}} | {{team}} |
+          | 错误率 | {{error_rate_metric}} | {{threshold}} | {{frequency}} | {{team}} |
+          | 吞吐量 | {{throughput_metric}} | {{threshold}} | {{frequency}} | {{team}} |
+          
+          **基础设施监控:**
+          
+          | 指标类别 | 监控指标 | 告警阈值 | 监控频率 | 责任团队 |
+          |----------|----------|----------|----------|----------|
+          | CPU使用率 | {{cpu_metric}} | {{threshold}} | {{frequency}} | {{team}} |
+          | 内存使用率 | {{memory_metric}} | {{threshold}} | {{frequency}} | {{team}} |
+          | 磁盘使用率 | {{disk_metric}} | {{threshold}} | {{frequency}} | {{team}} |
+      
+      - id: alert-escalation
+        title: 告警升级策略
+        template: |
+          **告警级别定义:**
+          
+          1. **P0 - 紧急 (Critical)**
+             - 现象: {{p0_symptoms}}
+             - 响应时间: {{p0_response_time}}
+             - 通知方式: {{p0_notification}}
+             - 升级路径: {{p0_escalation}}
+          
+          2. **P1 - 高 (High)**
+             - 现象: {{p1_symptoms}}
+             - 响应时间: {{p1_response_time}}
+             - 通知方式: {{p1_notification}}
+             - 升级路径: {{p1_escalation}}
+          
+          3. **P2 - 中 (Medium)**
+             - 现象: {{p2_symptoms}}
+             - 响应时间: {{p2_response_time}}
+             - 通知方式: {{p2_notification}}
+      
+      - id: health-checks
+        title: 健康检查设计
+        template: |
+          **健康检查端点:**
+          
+          ```yaml
+          # 服务健康检查配置示例
+          health_checks:
+            - name: {{service_name}}
+              endpoint: {{health_endpoint}}
+              method: {{http_method}}
+              timeout: {{timeout_seconds}}s
+              interval: {{check_interval}}s
+              success_codes: [{{success_codes}}]
+              dependencies:
+                - {{dependency_1}}
+                - {{dependency_2}}
+          ```
+          
+          **检查项目:**
+          - [ ] 数据库连接可用性
+          - [ ] 外部服务依赖状态
+          - [ ] 关键配置项有效性
+          - [ ] 磁盘空间充足性
+
+  - id: incident-response
+    title: 事件响应预案 (Incident Response Playbook)
+    sections:
+      - id: response-procedures
+        title: 响应流程
+        template: |
+          **事件响应标准流程:**
+          
+          1. **事件识别 (0-5分钟)**
+             - 接收告警或用户反馈
+             - 初步评估影响范围
+             - 分配初始响应人员
+          
+          2. **快速评估 (5-15分钟)**
+             - 确认问题严重程度
+             - 评估业务影响范围
+             - 决定是否需要紧急回滚
+          
+          3. **深度诊断 (15-60分钟)**
+             - 执行系统诊断检查清单
+             - 收集关键日志和指标
+             - 识别根本原因
+          
+          4. **问题解决 (60分钟内)**
+             - 实施临时缓解措施
+             - 执行根本性修复
+             - 验证修复效果
+          
+          5. **事后复盘 (24小时内)**
+             - 编写事件报告
+             - 总结经验教训
+             - 制定改进计划
+      
+      - id: communication-templates
+        title: 沟通模板
+        template: |
+          **事件通知模板:**
+          
+          ```
+          【生产事件通知】
+          时间: {{incident_time}}
+          影响: {{business_impact}}
+          状态: {{current_status}}
+          预计修复: {{estimated_resolution}}
+          负责人: {{incident_commander}}
+          ```
+          
+          **解决通知模板:**
+          
+          ```
+          【生产事件解决】
+          时间: {{resolution_time}}
+          根本原因: {{root_cause_summary}}
+          解决方案: {{solution_summary}}
+          后续行动: {{follow_up_actions}}
+          ```
+
+  - id: knowledge-base
+    title: 故障知识库 (Troubleshooting Knowledge Base)
+    sections:
+      - id: common-commands
+        title: 常用排查命令
+        template: |
+          **日志查看命令:**
+          ```bash
+          # 应用日志
+          {{app_log_command}}
+          
+          # 系统日志
+          {{system_log_command}}
+          
+          # 错误日志过滤
+          {{error_log_filter}}
+          ```
+          
+          **性能诊断命令:**
+          ```bash
+          # CPU使用情况
+          {{cpu_check_command}}
+          
+          # 内存使用情况
+          {{memory_check_command}}
+          
+          # 网络连接状态
+          {{network_check_command}}
+          
+          # 进程状态检查
+          {{process_check_command}}
+          ```
+          
+          **数据库诊断命令:**
+          ```sql
+          -- 慢查询检查
+          {{slow_query_command}}
+          
+          -- 连接数检查
+          {{connection_count_command}}
+          
+          -- 锁等待检查
+          {{lock_wait_command}}
+          ```
+      
+      - id: configuration-validation
+        title: 配置验证脚本
+        template: |
+          **配置检查脚本示例:**
+          
+          ```bash
+          #!/bin/bash
+          # {{project_name}} 配置验证脚本
+          
+          echo "检查关键配置文件..."
+          {{config_check_script}}
+          
+          echo "验证环境变量..."
+          {{env_var_check_script}}
+          
+          echo "测试外部依赖连接..."
+          {{dependency_check_script}}
+          
+          echo "配置验证完成"
+          ```
+      
+      - id: recovery-procedures
+        title: 恢复程序
+        template: |
+          **数据恢复程序:**
+          1. {{data_recovery_step_1}}
+          2. {{data_recovery_step_2}}
+          3. {{data_recovery_step_3}}
+          
+          **服务重启程序:**
+          1. {{service_restart_step_1}}
+          2. {{service_restart_step_2}}
+          3. {{service_restart_step_3}}
+          
+          **回滚程序:**
+          1. {{rollback_step_1}}
+          2. {{rollback_step_2}}
+          3. {{rollback_step_3}}
+
+  - id: appendices
+    title: 附录 (Appendices)
+    sections:
+      - id: contact-information
+        title: 联系信息
+        template: |
+          **紧急联系人:**
+          - 系统管理员: {{sysadmin_contact}}
+          - 开发团队负责人: {{dev_lead_contact}}
+          - 运维团队: {{ops_team_contact}}
+          - 业务负责人: {{business_owner_contact}}
+      
+      - id: external-resources
+        title: 外部资源
+        template: |
+          **相关文档链接:**
+          - 系统架构文档: {{architecture_doc_link}}
+          - API文档: {{api_doc_link}}
+          - 运维手册: {{ops_manual_link}}
+          - 监控面板: {{monitoring_dashboard_link}}
+      
+      - id: change-log
+        title: 文档变更记录
+        type: table
+        template: |
+          | 日期 | 版本 | 变更说明 | 作者 |
+          |------|------|----------|------|
+          | {{date}} | {{version}} | {{changes}} | {{author}} |

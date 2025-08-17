@@ -1,0 +1,12 @@
+bundle:
+  name: Documentation Generation Team
+  icon: 📚
+  description: AI-driven team for transforming complex codebases into comprehensive technical documentation that enables 3-day project understanding
+agents:
+  - code-analyst
+  - tech-architect
+  - doc-engineer
+  - flow-analyst
+  - problem-solver
+workflows:
+  - docs-generation-workflow.yaml

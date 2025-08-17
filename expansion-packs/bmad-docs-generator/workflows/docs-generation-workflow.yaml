@@ -1,0 +1,383 @@
+workflow:
+  id: docs-generation-workflow
+  name: AI-Driven Technical Documentation Generation
+  description: Complete workflow for transforming complex codebases into comprehensive technical documentation that enables 3-day project understanding for engineers
+  type: documentation-generation
+  project_types:
+    - enterprise-applications
+    - web-applications
+    - microservices
+    - legacy-systems
+    - open-source-projects
+    - api-services
+  
+  prerequisites:
+    - access_to_codebase: Target codebase must be accessible for analysis
+    - project_context: Basic understanding of project business domain
+    - analysis_tools: Code analysis tools and environment ready
+    - output_location: Documentation output location determined
+  
+  full_workflow_sequence:
+    - agent: code-analyst
+      action: scan-codebase
+      creates: codebase-analysis-report.md
+      duration: 2-4 hours
+      notes: "Deep scan of codebase to identify architecture, tech stack, and complex flows. CRITICAL: Must discover at least 15-30 complex flows for analysis."
+      
+    - agent: code-analyst
+      action: validate-analysis
+      uses: codebase-analysis-checklist
+      requires: codebase-analysis-report.md
+      duration: 30-60 minutes
+      notes: "Quality check of analysis completeness and accuracy. Address any gaps before proceeding."
+      
+    - agent: tech-architect
+      action: create-architecture-views
+      creates: architecture-views-analysis.md
+      requires: codebase-analysis-report.md
+      duration: 1-2 hours
+      notes: "Generate five-view architecture analysis with Mermaid diagrams. Focus on logical, development, deployment, runtime, and data views."
+      
+    - agent: tech-architect
+      action: generate-technical-overview
+      creates: "{{project_name}}-Technical-Overview.md"
+      requires: 
+        - codebase-analysis-report.md
+        - architecture-views-analysis.md
+      duration: 1-2 hours
+      notes: "Create comprehensive technical overview document. SAVE OUTPUT: This is the first deliverable for user confirmation."
+      
+    - workflow_checkpoint: user-confirmation-1
+      action: await_user_approval
+      deliverable: "{{project_name}}-Technical-Overview.md"
+      notes: "Present technical overview to user for review and confirmation before proceeding to flow analysis."
+      
+    - agent: flow-analyst
+      action: analyze-complex-flows
+      creates: complex-flows-detailed-analysis.md
+      requires: 
+        - "{{project_name}}-Technical-Overview.md"
+        - codebase-analysis-report.md
+      duration: 3-5 hours
+      notes: "Deep analysis of high and medium importance flows. Create detailed sequence diagrams and step-by-step analysis."
+      
+    - agent: flow-analyst
+      action: validate-flow-analysis
+      uses: flow-analysis-quality-checklist
+      requires: complex-flows-detailed-analysis.md
+      duration: 30-45 minutes
+      notes: "Quality check of flow analysis depth and accuracy."
+      
+    - agent: doc-engineer
+      action: generate-flow-analysis-doc
+      creates: "{{project_name}}-Complex-Flow-Analysis.md"
+      requires: complex-flows-detailed-analysis.md
+      duration: 1-1.5 hours
+      notes: "Transform flow analysis into structured document. SAVE OUTPUT: This is the second deliverable for user confirmation."
+      
+    - workflow_checkpoint: user-confirmation-2
+      action: await_user_approval
+      deliverable: "{{project_name}}-Complex-Flow-Analysis.md"
+      notes: "Present complex flow analysis to user for review and confirmation before proceeding to problem diagnosis."
+      
+    - agent: problem-solver
+      action: diagnose-potential-problems
+      creates: problem-diagnosis-analysis.md
+      requires: 
+        - "{{project_name}}-Complex-Flow-Analysis.md"
+        - complex-flows-detailed-analysis.md
+      duration: 2-3 hours
+      notes: "Predict potential problems from SRE perspective. Create comprehensive problem-solution matrix."
+      
+    - agent: problem-solver
+      action: validate-problem-diagnosis
+      uses: problem-diagnosis-quality-checklist
+      requires: problem-diagnosis-analysis.md
+      duration: 30 minutes
+      notes: "Quality check of problem prediction accuracy and solution completeness."
+      
+    - agent: doc-engineer
+      action: generate-problem-diagnosis-doc
+      creates: "{{project_name}}-Problem-Diagnosis-Solution.md"
+      requires: problem-diagnosis-analysis.md
+      duration: 1-1.5 hours
+      notes: "Create final problem diagnosis document. SAVE OUTPUT: This is the third and final deliverable."
+      
+    - agent: doc-engineer
+      action: final-quality-validation
+      uses: documentation-quality-checklist
+      requires:
+        - "{{project_name}}-Technical-Overview.md"
+        - "{{project_name}}-Complex-Flow-Analysis.md"
+        - "{{project_name}}-Problem-Diagnosis-Solution.md"
+      duration: 45-60 minutes
+      notes: "Final comprehensive quality check across all three documents."
+      
+  workflow_end:
+    action: package_deliverables
+    deliverables:
+      - "{{project_name}}-Technical-Overview.md"
+      - "{{project_name}}-Complex-Flow-Analysis.md"
+      - "{{project_name}}-Problem-Diagnosis-Solution.md"
+    notes: "Complete documentation package ready. Engineers should be able to understand and maintain the project within 3 days using these documents."
+
+  rapid_workflow_sequence:
+    description: "Streamlined workflow for smaller projects or time-constrained scenarios"
+    - agent: code-analyst
+      action: scan-codebase
+      creates: codebase-analysis-report.md
+      duration: 1-2 hours
+      notes: "Focused analysis targeting 10-15 most critical flows only."
+      
+    - agent: tech-architect
+      action: generate-technical-overview
+      creates: "{{project_name}}-Technical-Overview.md"
+      requires: codebase-analysis-report.md
+      duration: 1.5-2 hours
+      notes: "Streamlined technical overview focusing on essential architecture and flows."
+      
+    - agent: problem-solver
+      action: diagnose-critical-problems
+      creates: "{{project_name}}-Critical-Problems-Guide.md"
+      requires: "{{project_name}}-Technical-Overview.md"
+      duration: 1-1.5 hours
+      notes: "Focus on highest-risk problems and essential troubleshooting guidance."
+
+  flow_diagram: |
+    ```mermaid
+    graph TD
+        A[Start: Documentation Request] --> B[code-analyst: scan-codebase]
+        B --> C[code-analyst: validate-analysis]
+        C --> D{Analysis Quality OK?}
+        D -->|No| B
+        D -->|Yes| E[tech-architect: create-architecture-views]
+        E --> F[tech-architect: generate-technical-overview]
+        F --> G[User Confirmation 1]
+        G --> H[flow-analyst: analyze-complex-flows]
+        H --> I[flow-analyst: validate-flow-analysis]
+        I --> J{Flow Analysis OK?}
+        J -->|No| H
+        J -->|Yes| K[doc-engineer: generate-flow-analysis-doc]
+        K --> L[User Confirmation 2]
+        L --> M[problem-solver: diagnose-potential-problems]
+        M --> N[problem-solver: validate-problem-diagnosis]
+        N --> O{Diagnosis OK?}
+        O -->|No| M
+        O -->|Yes| P[doc-engineer: generate-problem-diagnosis-doc]
+        P --> Q[doc-engineer: final-quality-validation]
+        Q --> R[Complete: Package Deliverables]
+        
+        style A fill:#e1f5fe
+        style G fill:#fff3e0
+        style L fill:#fff3e0
+        style R fill:#e8f5e8
+        style B fill:#f3e5f5
+        style E fill:#f3e5f5
+        style H fill:#f3e5f5
+        style M fill:#f3e5f5
+    ```
+
+  decision_guidance:
+    use_full_workflow_when:
+      - Complex enterprise systems with 50+ KLOC
+      - Mission-critical applications requiring comprehensive documentation
+      - Legacy systems with high business impact
+      - Systems with complex integration patterns
+      - Teams needing detailed onboarding documentation
+      - Regulatory or compliance documentation requirements
+      
+    use_rapid_workflow_when:
+      - Smaller projects under 20 KLOC
+      - Proof-of-concept or prototype documentation
+      - Time-constrained documentation needs
+      - Simple microservices or APIs
+      - Internal tools with limited complexity
+      - Quick assessment and overview needs
+
+  quality_gates:
+    gate_1_codebase_analysis:
+      criteria:
+        - At least 15 complex flows identified for full workflow (10 for rapid)
+        - Technology stack completely cataloged
+        - Architecture patterns clearly identified
+        - Dependencies mapped accurately
+      failure_action: Return to code-analyst for deeper analysis
+      
+    gate_2_architecture_views:
+      criteria:
+        - All five architectural views created
+        - Mermaid diagrams render correctly
+        - Views are consistent with each other
+        - Technical details verified against code
+      failure_action: Return to tech-architect for revision
+      
+    gate_3_flow_analysis:
+      criteria:
+        - High-importance flows have detailed sequence diagrams
+        - Medium-importance flows have appropriate level of detail
+        - Configuration dependencies identified
+        - Step-by-step analysis is code-backed
+      failure_action: Return to flow-analyst for enhancement
+      
+    gate_4_problem_diagnosis:
+      criteria:
+        - Problems predicted from user and system perspectives
+        - Solutions are specific and actionable
+        - Diagnostic procedures are practical
+        - Monitoring recommendations are implementable
+      failure_action: Return to problem-solver for improvement
+      
+    gate_5_final_quality:
+      criteria:
+        - All three documents meet 3-day understanding goal
+        - Technical accuracy verified
+        - Documentation consistency confirmed
+        - Usability validated
+      failure_action: Return to relevant agent for final polishing
+
+  success_metrics:
+    process_efficiency:
+      - Full workflow completion in 8-12 hours for complex systems
+      - Rapid workflow completion in 4-6 hours for simple systems
+      - Less than 20% rework rate across quality gates
+      - User approval rate >90% at checkpoints
+      
+    documentation_quality:
+      - Technical accuracy >95% when spot-checked
+      - Mermaid diagram render rate 100%
+      - 3-day understanding goal achievement verified
+      - Problem solution actionability >90%
+      
+    business_value:
+      - Reduction in new engineer onboarding time
+      - Faster problem diagnosis and resolution
+      - Improved system maintainability
+      - Enhanced team productivity and collaboration
+
+  agent_handoff_protocols:
+    analyst_to_architect:
+      trigger: Codebase analysis validation complete
+      handoff_data:
+        - Complete technology stack inventory
+        - Identified complex flows with priority ranking
+        - Architecture patterns and module dependencies
+        - Performance and security considerations
+      validation: Architect confirms sufficient detail for architecture views
+      
+    architect_to_flow_analyst:
+      trigger: Technical overview user confirmation received
+      handoff_data:
+        - Approved technical overview document
+        - Architecture views and component relationships
+        - Technology context and constraints
+        - Priority flow list from codebase analysis
+      validation: Flow analyst confirms understanding of system context
+      
+    flow_analyst_to_problem_solver:
+      trigger: Complex flow analysis user confirmation received
+      handoff_data:
+        - Detailed flow analysis with sequence diagrams
+        - Configuration dependencies and risk points
+        - Performance characteristics and bottlenecks
+        - Cross-flow relationships and shared components
+      validation: Problem solver confirms sufficient detail for problem prediction
+      
+    problem_solver_to_doc_engineer:
+      trigger: Problem diagnosis analysis complete
+      handoff_data:
+        - Comprehensive problem-solution matrix
+        - Diagnostic procedures and monitoring recommendations
+        - Incident response playbooks
+        - Knowledge base and troubleshooting guides
+      validation: Doc engineer confirms content ready for final document generation
+
+  automation_opportunities:
+    high_priority:
+      - Automated dependency extraction from package managers
+      - Static code analysis for complexity metrics
+      - Configuration file discovery and parsing
+      - Mermaid diagram syntax validation
+      
+    medium_priority:
+      - Automated API endpoint discovery
+      - Database schema extraction
+      - Performance bottleneck identification
+      - Security vulnerability scanning
+      
+    future_enhancements:
+      - Natural language generation for technical descriptions
+      - Automated code-to-sequence diagram generation
+      - Intelligent flow priority ranking
+      - Dynamic documentation updates
+
+  troubleshooting_guide:
+    common_issues:
+      insufficient_complex_flows:
+        symptom: "Less than 15 complex flows identified"
+        cause: "Analysis too shallow or codebase genuinely simple"
+        solution: "Deepen analysis or switch to rapid workflow"
+        
+      architecture_view_inconsistencies:
+        symptom: "Views contradict each other"
+        cause: "Different abstraction levels or analysis errors"
+        solution: "Re-examine code with focus on consistency"
+        
+      user_rejection_at_checkpoints:
+        symptom: "User feedback indicates inaccuracies"
+        cause: "Analysis missed important context or business logic"
+        solution: "Gather additional context and re-analyze specific areas"
+        
+      mermaid_rendering_failures:
+        symptom: "Diagrams fail to render"
+        cause: "Syntax errors or complexity limits"
+        solution: "Validate syntax and simplify overly complex diagrams"
+
+  project_setup_guidance:
+    initial_requirements:
+      - Determine project scope and documentation depth needed
+      - Identify key stakeholders and reviewers
+      - Establish output format and delivery requirements
+      - Set timeline expectations based on project complexity
+      
+    environment_preparation:
+      - Ensure codebase access and navigation tools
+      - Prepare analysis workspace and tools
+      - Set up documentation output directory structure
+      - Configure quality check and validation processes
+      
+    team_coordination:
+      - Assign primary reviewer for each checkpoint
+      - Establish communication channels for questions
+      - Define approval criteria and processes
+      - Plan knowledge transfer sessions
+
+  best_practices:
+    for_code_analysts:
+      - Start with broad overview before diving into details
+      - Use multiple analysis methods to cross-validate findings
+      - Focus on business-critical paths first
+      - Document assumptions and analysis limitations
+      
+    for_tech_architects:
+      - Ensure architectural views tell a cohesive story
+      - Balance technical accuracy with accessibility
+      - Use consistent abstraction levels across views
+      - Validate diagrams against actual implementation
+      
+    for_flow_analysts:
+      - Prioritize flows by business impact and complexity
+      - Include error handling and edge cases in analysis
+      - Focus on inter-service communication patterns
+      - Document configuration dependencies thoroughly
+      
+    for_problem_solvers:
+      - Think like an on-call engineer facing production issues
+      - Provide specific commands and check procedures
+      - Consider cascade failures and system-wide impacts
+      - Balance comprehensive coverage with practical usability
+      
+    for_doc_engineers:
+      - Maintain consistent terminology across documents
+      - Optimize for 3-day understanding goal
+      - Use progressive disclosure of complexity
+      - Ensure documents work together as a coherent set
