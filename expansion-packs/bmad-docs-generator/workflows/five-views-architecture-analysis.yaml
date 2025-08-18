@@ -1,0 +1,256 @@
+name: "架构五视图分析工作流"
+description: "全面的架构五视图分析工作流，确保覆盖逻辑、开发、部署、运行和数据架构"
+version: "2.0"
+type: "architecture-analysis"
+
+phases:
+  - name: "初始化阶段"
+    description: "准备分析环境和资源"
+    tasks:
+      - name: "prepare-analysis-environment"
+        agent: "architecture-analyst"
+        description: "准备架构分析环境"
+        inputs:
+          - "target_system"
+          - "analysis_scope"
+        outputs:
+          - "analysis_plan"
+          - "resource_requirements"
+
+  - name: "逻辑架构分析阶段"
+    description: "分析系统的逻辑架构视图"
+    tasks:
+      - name: "analyze-logical-architecture"
+        agent: "architecture-analyst"
+        description: "分析逻辑架构组件和关系"
+        inputs:
+          - "system_components"
+          - "component_relationships"
+        outputs:
+          - "logical_architecture_report"
+          - "logical_architecture_diagram"
+      
+      - name: "identify-architectural-patterns"
+        agent: "pattern-recognition-expert"
+        description: "识别架构模式和设计模式"
+        inputs:
+          - "logical_architecture_report"
+        outputs:
+          - "architectural_patterns_analysis"
+          - "design_patterns_identification"
+
+  - name: "开发架构分析阶段"
+    description: "分析系统的开发架构视图"
+    tasks:
+      - name: "analyze-tech-stack"
+        agent: "tech-stack-expert"
+        description: "分析技术栈和框架选择"
+        inputs:
+          - "technology_choices"
+          - "framework_selections"
+        outputs:
+          - "tech_stack_analysis"
+          - "framework_evaluation"
+      
+      - name: "analyze-code-organization"
+        agent: "architecture-analyst"
+        description: "分析代码组织结构和质量"
+        inputs:
+          - "code_structure"
+          - "development_practices"
+        outputs:
+          - "code_organization_analysis"
+          - "code_quality_assessment"
+
+  - name: "部署架构分析阶段"
+    description: "分析系统的部署架构视图"
+    tasks:
+      - name: "analyze-deployment-environment"
+        agent: "architecture-analyst"
+        description: "分析部署环境和基础设施"
+        inputs:
+          - "deployment_config"
+          - "infrastructure_setup"
+        outputs:
+          - "deployment_environment_analysis"
+          - "infrastructure_architecture"
+      
+      - name: "analyze-containerization"
+        agent: "tech-stack-expert"
+        description: "分析容器化和云服务配置"
+        inputs:
+          - "container_config"
+          - "cloud_services"
+        outputs:
+          - "containerization_analysis"
+          - "cloud_services_evaluation"
+
+  - name: "运行架构分析阶段"
+    description: "分析系统的运行架构视图"
+    tasks:
+      - name: "analyze-runtime-components"
+        agent: "architecture-analyst"
+        description: "分析运行时组件和交互"
+        inputs:
+          - "runtime_config"
+          - "component_interactions"
+        outputs:
+          - "runtime_components_analysis"
+          - "runtime_architecture"
+      
+      - name: "analyze-performance-monitoring"
+        agent: "tech-stack-expert"
+        description: "分析性能特征和监控策略"
+        inputs:
+          - "performance_metrics"
+          - "monitoring_config"
+        outputs:
+          - "performance_analysis"
+          - "monitoring_strategy"
+
+  - name: "数据架构分析阶段"
+    description: "分析系统的数据架构视图"
+    tasks:
+      - name: "analyze-data-storage"
+        agent: "architecture-analyst"
+        description: "分析数据存储策略和模型"
+        inputs:
+          - "data_storage_config"
+          - "data_models"
+        outputs:
+          - "data_storage_analysis"
+          - "data_model_evaluation"
+      
+      - name: "analyze-data-flow-security"
+        agent: "tech-stack-expert"
+        description: "分析数据流和安全策略"
+        inputs:
+          - "data_flow_config"
+          - "security_policies"
+        outputs:
+          - "data_flow_analysis"
+          - "data_security_assessment"
+
+  - name: "质量评估阶段"
+    description: "综合评估架构质量"
+    tasks:
+      - name: "evaluate-architecture-quality"
+        agent: "architecture-analyst"
+        description: "评估各架构视图的质量"
+        inputs:
+          - "all_architecture_reports"
+        outputs:
+          - "quality_assessment"
+          - "quality_scores"
+      
+      - name: "identify-risks-improvements"
+        agent: "pattern-recognition-expert"
+        description: "识别风险和改进点"
+        inputs:
+          - "quality_assessment"
+        outputs:
+          - "risk_analysis"
+          - "improvement_suggestions"
+
+  - name: "报告生成阶段"
+    description: "生成最终的架构五视图分析报告"
+    tasks:
+      - name: "generate-five-views-report"
+        agent: "architecture-analyst"
+        description: "生成架构五视图分析报告"
+        inputs:
+          - "all_analysis_results"
+          - "quality_assessment"
+          - "risk_analysis"
+        outputs:
+          - "five_views_architecture_report"
+          - "executive_summary"
+      
+      - name: "create-architecture-diagrams"
+        agent: "tech-stack-expert"
+        description: "创建各视图的架构图"
+        inputs:
+          - "architecture_data"
+        outputs:
+          - "architecture_diagrams"
+          - "visual_summary"
+
+  - name: "最终验证阶段"
+    description: "验证分析报告的完整性和准确性"
+    tasks:
+      - name: "validate-analysis-completeness"
+        agent: "architecture-analyst"
+        description: "验证五视图分析的完整性"
+        inputs:
+          - "five_views_architecture_report"
+        outputs:
+          - "completeness_validation"
+          - "missing_areas"
+      
+      - name: "final-review"
+        agent: "pattern-recognition-expert"
+        description: "最终审查和确认"
+        inputs:
+          - "complete_analysis"
+        outputs:
+          - "final_approval"
+          - "delivery_ready_report"
+
+outputs:
+  - name: "five_views_architecture_report"
+    type: "markdown"
+    description: "完整的架构五视图分析报告"
+  
+  - name: "executive_summary"
+    type: "markdown"
+    description: "执行摘要"
+  
+  - name: "architecture_diagrams"
+    type: "mermaid"
+    description: "各视图的架构图"
+  
+  - name: "quality_assessment"
+    type: "yaml"
+    description: "架构质量评估"
+  
+  - name: "risk_analysis"
+    type: "markdown"
+    description: "风险评估报告"
+  
+  - name: "improvement_suggestions"
+    type: "markdown"
+    description: "改进建议"
+
+quality_gates:
+  - name: "five_views_completeness"
+    description: "确保所有五个架构视图都已分析"
+    criteria:
+      - "逻辑架构视图已分析"
+      - "开发架构视图已分析"
+      - "部署架构视图已分析"
+      - "运行架构视图已分析"
+      - "数据架构视图已分析"
+  
+  - name: "analysis_depth"
+    description: "确保每个视图都有足够的分析深度"
+    criteria:
+      - "每个视图都有详细的技术分析"
+      - "识别了关键的设计决策"
+      - "评估了架构质量"
+      - "提供了改进建议"
+  
+  - name: "visual_documentation"
+    description: "确保有适当的可视化文档"
+    criteria:
+      - "每个视图都有对应的架构图"
+      - "图表清晰易懂"
+      - "包含关键组件和关系"
+
+metadata:
+  estimated_duration: "6-8 hours"
+  complexity: "high"
+  required_agents: ["architecture-analyst", "tech-stack-expert", "pattern-recognition-expert"]
+  prerequisites:
+    - "系统技术文档"
+    - "架构配置文件"
+    - "部署配置信息"

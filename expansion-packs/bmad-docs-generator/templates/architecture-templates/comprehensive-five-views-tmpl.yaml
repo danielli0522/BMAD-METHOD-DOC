@@ -1,0 +1,213 @@
+name: "完整架构五视图分析模板"
+description: "基于AI驱动的代码深度分析与技术文档生成的完整架构五视图分析模板"
+version: "3.0"
+type: "comprehensive-architecture-analysis"
+
+sections:
+  - name: "项目概述"
+    type: "project-overview"
+    content: |
+      ## 1. 项目概述
+      
+      ### 1.1 项目背景与使命
+      {{project_background}}
+      
+      ### 1.2 主要用户角色与场景
+      {{user_roles_scenarios}}
+
+  - name: "技术栈详解"
+    type: "tech-stack-analysis"
+    content: |
+      ## 2. 技术栈详解
+      
+      ### 2.1 前端技术栈
+      | 技术类别 | 技术选择 | 版本 | 用途说明 | 关键特性 | 质量评估 |
+      |---------|---------|------|---------|---------|---------|
+      {{frontend_tech_stack}}
+      
+      ### 2.2 后端技术栈
+      | 技术类别 | 技术选择 | 版本 | 用途说明 | 关键特性 | 质量评估 |
+      |---------|---------|------|---------|---------|---------|
+      {{backend_tech_stack}}
+      
+      ### 2.3 中间件技术栈
+      | 技术类别 | 技术选择 | 版本 | 用途说明 | 关键特性 | 质量评估 |
+      |---------|---------|------|---------|---------|---------|
+      {{middleware_tech_stack}}
+      
+      ### 2.4 部署与运维技术栈
+      | 技术类别 | 技术选择 | 版本 | 用途说明 | 关键特性 | 质量评估 |
+      |---------|---------|------|---------|---------|---------|
+      {{deployment_tech_stack}}
+
+  - name: "架构五视图分析"
+    type: "five-views-architecture"
+    content: |
+      ## 3. 架构五视图分析
+      
+      ### 3.1 逻辑视图 (Logical View)
+      
+      #### 3.1.1 逻辑架构图
+      ```mermaid
+      {{logical_architecture_diagram}}
+      ```
+      
+      #### 3.1.2 逻辑架构说明
+      {{logical_architecture_explanation}}
+      
+      **典型请求流程**:
+      {{typical_request_flow}}
+      
+      ### 3.2 开发视图 (Development View)
+      
+      #### 3.2.1 开发架构图
+      ```mermaid
+      {{development_architecture_diagram}}
+      ```
+      
+      #### 3.2.2 开发架构说明
+      {{development_architecture_explanation}}
+      
+      **目录结构分析**:
+      {{directory_structure_analysis}}
+      
+      **关键第三方库**:
+      {{key_third_party_libraries}}
+      
+      ### 3.3 部署视图 (Deployment View)
+      
+      #### 3.3.1 部署架构图
+      ```mermaid
+      {{deployment_architecture_diagram}}
+      ```
+      
+      #### 3.3.2 部署架构说明
+      {{deployment_architecture_explanation}}
+      
+      **部署拓扑说明**:
+      {{deployment_topology_explanation}}
+      
+      ### 3.4 运行视图 (Runtime View)
+      
+      #### 3.4.1 运行架构图
+      ```mermaid
+      {{runtime_architecture_diagram}}
+      ```
+      
+      #### 3.4.2 运行架构说明
+      {{runtime_architecture_explanation}}
+      
+      **并发模型**:
+      {{concurrency_model}}
+      
+      **同步异步机制**:
+      {{sync_async_mechanism}}
+      
+      **队列生产消费机制**:
+      {{queue_producer_consumer_mechanism}}
+      
+      ### 3.5 数据视图 (Data View)
+      
+      #### 3.5.1 数据架构图
+      ```mermaid
+      {{data_architecture_diagram}}
+      ```
+      
+      #### 3.5.2 数据架构说明
+      {{data_architecture_explanation}}
+      
+      **核心数据表**:
+      {{core_data_tables}}
+      
+      **关键字段说明**:
+      {{key_fields_explanation}}
+
+  - name: "核心复杂流程识别"
+    type: "complex-flow-identification"
+    content: |
+      ## 4. 核心复杂流程识别表
+      
+      | 流程名称 | 流程入口函数 | 核心复杂性解释 | 潜在问题 | 重要程度 (高/中/低) |
+      |---------|-------------|---------------|---------|-------------------|
+      {{complex_flows_table}}
+
+  - name: "架构质量评估"
+    type: "architecture-quality-assessment"
+    content: |
+      ## 5. 架构质量评估
+      
+      ### 5.1 各视图质量评分
+      | 架构视图 | 质量评分 | 主要优势 | 改进建议 |
+      |---------|---------|---------|---------|
+      | **逻辑架构** | {{logical_quality_score}} | {{logical_strengths}} | {{logical_improvements}} |
+      | **开发架构** | {{development_quality_score}} | {{development_strengths}} | {{development_improvements}} |
+      | **部署架构** | {{deployment_quality_score}} | {{deployment_strengths}} | {{deployment_improvements}} |
+      | **运行架构** | {{runtime_quality_score}} | {{runtime_strengths}} | {{runtime_improvements}} |
+      | **数据架构** | {{data_quality_score}} | {{data_strengths}} | {{data_improvements}} |
+      
+      ### 5.2 整体架构质量
+      {{overall_architecture_quality}}
+      
+      ### 5.3 架构一致性评估
+      {{architecture_consistency}}
+
+  - name: "风险评估"
+    type: "risk-assessment"
+    content: |
+      ## 6. 风险评估
+      
+      ### 6.1 技术风险
+      {{technical_risks}}
+      
+      ### 6.2 架构风险
+      {{architectural_risks}}
+      
+      ### 6.3 运营风险
+      {{operational_risks}}
+      
+      ### 6.4 安全风险
+      {{security_risks}}
+
+  - name: "改进建议"
+    type: "improvement-suggestions"
+    content: |
+      ## 7. 改进建议
+      
+      ### 7.1 短期改进 (1-3个月)
+      {{short_term_improvements}}
+      
+      ### 7.2 中期改进 (3-6个月)
+      {{medium_term_improvements}}
+      
+      ### 7.3 长期改进 (6-12个月)
+      {{long_term_improvements}}
+
+  - name: "结论"
+    type: "conclusion"
+    content: |
+      ## 8. 结论
+      
+      ### 8.1 架构优势总结
+      {{architecture_strengths_summary}}
+      
+      ### 8.2 关键改进点
+      {{key_improvement_points}}
+      
+      ### 8.3 发展建议
+      {{development_recommendations}}
+
+metadata:
+  analysis_type: "comprehensive-five-views-architecture"
+  required_agents: ["architecture-analyst", "tech-stack-expert", "pattern-recognition-expert", "code-analyzer"]
+  estimated_duration: "8-12 hours"
+  complexity: "very-high"
+  deliverables:
+    - "项目名-Technical-Overview.md"
+    - "项目名-Complex-Flow-Analysis.md"
+    - "项目名-Problem-Diagnosis-Solution.md"
+  analysis_standards:
+    - "准确性: 所有分析必须基于实际代码，严禁主观臆断"
+    - "可视化: 所有图表必须使用Mermaid绘制，并确保语法正确、可渲染"
+    - "结构化: 文档必须层次分明，严格遵循上述结构"
+    - "实用性: 内容必须直指痛点，真正帮助工程师快速上手"
+    - "一致性: 所有交付物中的术语、命名和图元必须保持一致"

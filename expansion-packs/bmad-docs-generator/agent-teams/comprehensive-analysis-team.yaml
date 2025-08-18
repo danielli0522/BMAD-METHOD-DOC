@@ -1,0 +1,195 @@
+name: "完整架构分析团队"
+description: "专门负责完整架构五视图分析的专家团队，包含架构分析师、代码分析专家、技术栈专家、SRE工程师等"
+version: "3.0"
+type: "comprehensive-analysis"
+
+agents:
+  - name: "architecture-analyst"
+    role: "架构分析师"
+    description: "负责架构五视图分析和架构质量评估"
+    expertise:
+      - "架构模式识别"
+      - "架构质量评估"
+      - "架构设计原则"
+      - "架构可视化"
+    
+  - name: "code-analyzer"
+    role: "代码分析专家"
+    description: "负责代码结构分析、复杂流程识别和性能分析"
+    expertise:
+      - "代码结构分析"
+      - "复杂流程识别"
+      - "性能瓶颈分析"
+      - "代码质量评估"
+    
+  - name: "tech-stack-expert"
+    role: "技术栈专家"
+    description: "负责技术栈分析、技术选型评估和升级建议"
+    expertise:
+      - "技术栈分析"
+      - "技术选型评估"
+      - "版本兼容性分析"
+      - "技术升级建议"
+    
+  - name: "pattern-recognition-expert"
+    role: "模式识别专家"
+    description: "负责设计模式识别、反模式检测和最佳实践建议"
+    expertise:
+      - "设计模式识别"
+      - "反模式检测"
+      - "最佳实践建议"
+      - "架构模式分析"
+    
+  - name: "sre-engineer"
+    role: "SRE工程师"
+    description: "负责系统可靠性分析、故障诊断和问题解决方案"
+    expertise:
+      - "系统可靠性分析"
+      - "故障诊断"
+      - "性能监控"
+      - "运维自动化"
+
+workflow:
+  phases:
+    - name: "项目初始化"
+      description: "项目信息收集和分析准备"
+      tasks:
+        - "收集项目基本信息"
+        - "确定分析范围和目标"
+        - "准备分析工具和环境"
+    
+    - name: "代码结构分析"
+      description: "深度分析代码结构和依赖关系"
+      tasks:
+        - "分析目录结构"
+        - "识别模块依赖关系"
+        - "分析代码复杂度"
+        - "识别设计模式"
+    
+    - name: "技术栈分析"
+      description: "全面分析技术栈和组件"
+      tasks:
+        - "识别技术组件"
+        - "分析版本兼容性"
+        - "评估技术债务"
+        - "提供升级建议"
+    
+    - name: "架构五视图分析"
+      description: "生成完整的架构五视图"
+      tasks:
+        - "逻辑视图分析"
+        - "开发视图分析"
+        - "部署视图分析"
+        - "运行视图分析"
+        - "数据视图分析"
+    
+    - name: "复杂流程识别"
+      description: "识别和分析核心复杂流程"
+      tasks:
+        - "识别核心流程"
+        - "评估流程复杂度"
+        - "分析流程依赖"
+        - "预测潜在问题"
+    
+    - name: "质量评估"
+      description: "评估架构质量和风险"
+      tasks:
+        - "架构质量评估"
+        - "风险评估"
+        - "改进建议"
+        - "优化方案"
+    
+    - name: "文档生成"
+      description: "生成标准化的技术文档"
+      tasks:
+        - "生成技术总览文档"
+        - "生成复杂流程分析文档"
+        - "生成问题诊断文档"
+        - "质量检查和优化"
+
+deliverables:
+  - name: "项目名-Technical-Overview.md"
+    description: "项目技术总览文档"
+    content:
+      - "项目概述"
+      - "技术栈详解"
+      - "架构五视图分析"
+      - "核心复杂流程识别"
+      - "架构质量评估"
+  
+  - name: "项目名-Complex-Flow-Analysis.md"
+    description: "复杂流程深度分析文档"
+    content:
+      - "高重要程度流程分析"
+      - "中重要程度流程分析"
+      - "流程间依赖关系"
+      - "性能分析"
+      - "优化建议"
+  
+  - name: "项目名-Problem-Diagnosis-Solution.md"
+    description: "问题诊断与快速解决方案文档"
+    content:
+      - "高重要程度流程问题诊断"
+      - "中重要程度流程问题诊断"
+      - "系统级问题诊断"
+      - "监控与告警策略"
+      - "预防性措施"
+      - "应急响应计划"
+
+quality_gates:
+  - name: "代码分析完整性"
+    description: "确保代码分析覆盖所有重要模块"
+    criteria:
+      - "所有核心模块已分析"
+      - "依赖关系已识别"
+      - "复杂度已评估"
+      - "设计模式已识别"
+  
+  - name: "架构五视图完整性"
+    description: "确保架构五视图分析完整"
+    criteria:
+      - "逻辑视图已分析"
+      - "开发视图已分析"
+      - "部署视图已分析"
+      - "运行视图已分析"
+      - "数据视图已分析"
+  
+  - name: "流程分析深度"
+    description: "确保复杂流程分析足够深入"
+    criteria:
+      - "核心流程已识别"
+      - "时序图已绘制"
+      - "配置项已分析"
+      - "步骤分析已详细"
+  
+  - name: "问题诊断准确性"
+    description: "确保问题诊断准确具体"
+    criteria:
+      - "问题现象描述准确"
+      - "根本原因分析正确"
+      - "解决方案可行"
+      - "预防措施有效"
+  
+  - name: "文档质量"
+    description: "确保文档质量符合标准"
+    criteria:
+      - "文档结构清晰"
+      - "图表语法正确"
+      - "术语使用一致"
+      - "内容完整准确"
+
+metadata:
+  estimated_duration: "12-16 hours"
+  complexity: "very-high"
+  required_skills:
+    - "架构设计"
+    - "代码分析"
+    - "技术栈评估"
+    - "性能分析"
+    - "故障诊断"
+  analysis_standards:
+    - "准确性: 所有分析必须基于实际代码"
+    - "可视化: 所有图表必须使用Mermaid绘制"
+    - "结构化: 文档必须层次分明"
+    - "实用性: 内容必须直指痛点"
+    - "一致性: 所有术语和图元必须保持一致"
