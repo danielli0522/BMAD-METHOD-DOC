@@ -1,0 +1,31 @@
+{
+  "name": "ai-agile-dap-tests",
+  "version": "1.0.0",
+  "description": "Test suite for AI-Agile-DAP data source connection framework",
+  "scripts": {
+    "test": "jest --config jest.config.js",
+    "test:watch": "jest --config jest.config.js --watch",
+    "test:coverage": "jest --config jest.config.js --coverage",
+    "test:unit": "jest --config jest.config.js --testPathPattern=unit",
+    "test:integration": "jest --config jest.config.js --testPathPattern=integration",
+    "test:ci": "jest --config jest.config.js --coverage --ci --watchAll=false",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --config jest.config.js --runInBand",
+    "lint": "eslint ../src --ext .js --fix",
+    "lint:check": "eslint ../src --ext .js"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "supertest": "^6.3.0",
+    "eslint": "^8.0.0"
+  },
+  "dependencies": {
+    "mysql2": "^3.6.0",
+    "pg": "^8.8.0",
+    "xlsx": "^0.18.5",
+    "csv-parser": "^3.0.0",
+    "multer": "^1.4.5-lts.1"
+  },
+  "jest": {
+    "preset": "./jest.config.js"
+  }
+}

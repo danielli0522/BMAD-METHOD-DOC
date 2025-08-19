@@ -1,0 +1,51 @@
+{
+  "name": "ai-agile-dap-backend",
+  "version": "1.0.0",
+  "description": "AI-Agile-DAP 后端服务 - 提供API接口和业务逻辑",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.11.3",
+    "sequelize": "^6.37.5",
+    "redis": "^4.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "joi": "^17.13.3",
+    "express-rate-limit": "^7.4.1",
+    "compression": "^1.7.4",
+    "winston": "^3.15.0",
+    "axios": "^1.7.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "eslint": "^9.14.0",
+    "@eslint/js": "^9.14.0"
+  },
+  "keywords": [
+    "ai",
+    "backend",
+    "api",
+    "microservices",
+    "node.js",
+    "express"
+  ],
+  "author": "AI-Agile-DAP Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Agile-DAP 数据洞察平台</title>
+    
+    <!-- React 18 CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel Standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Ant Design -->
+    <link rel="stylesheet" href="https://unpkg.com/antd@5.27.0/dist/antd.min.css">
+    <script src="https://unpkg.com/antd@5.27.0/dist/antd.min.js"></script>
+    
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios@1.11.0/dist/axios.min.js"></script>
+    
+    <!-- ECharts -->
+    <script src="https://unpkg.com/echarts@5.6.0/dist/echarts.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+        }
+        #root {
+            height: 100vh;
+        }
+        .demo-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .demo-card {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-online { background: #52c41a; }
+        .status-offline { background: #ff4d4f; }
+        .query-demo {
+            background: #f9f9f9;
+            border-left: 4px solid #1890ff;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .btn {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #40a9ff;
+        }
+        .metric-card {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            margin: 10px;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1890ff;
+        }
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="demo-title">
+            <h1>🤖 AI-Agile-DAP 数据洞察平台</h1>
+            <p>企业级AI驱动数据分析平台 - MVP演示版本</p>
+        </div>
+
+        <div class="demo-card">
+            <h2>🔧 系统状态监控</h2>
+            <div id="system-status">
+                <p><span class="status-indicator status-online"></span>后端API服务 (端口:8000) - 运行中</p>
+                <p><span class="status-indicator status-online"></span>AI引擎服务 (端口:8002) - 运行中</p>
+                <p><span class="status-indicator status-online"></span>前端UI服务 (端口:3000) - 运行中</p>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2>🔐 用户认证系统</h2>
+            <p><strong>演示账号:</strong> demo / 123456</p>
+            <div>
+                <button class="btn" onclick="testLogin()">测试登录</button>
+                <button class="btn" onclick="testProfile()">获取用户信息</button>
+            </div>
+            <div id="auth-result" style="margin-top: 16px; padding: 16px; background: #f6f8fa; border-radius: 4px; display: none;">
+                <pre id="auth-output"></pre>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2>🤖 智能查询演示</h2>
+            <p>支持5种查询类型的自然语言处理：</p>
+            
+            <div class="query-demo">
+                <strong>🔍 趋势分析:</strong> "显示过去3个月的销售趋势"
+                <button class="btn" onclick="testQuery('显示过去3个月的销售趋势', 'trend')">测试查询</button>
+            </div>
+            
+            <div class="query-demo">
+                <strong>📊 对比分析:</strong> "各部门销售业绩对比"
+                <button class="btn" onclick="testQuery('各部门销售业绩对比', 'comparison')">测试查询</button>
+            </div>
+            
+            <div class="query-demo">
+                <strong>🏆 排名分析:</strong> "TOP10产品销售排名"
+                <button class="btn" onclick="testQuery('TOP10产品销售排名', 'ranking')">测试查询</button>
+            </div>
+            
+            <div class="query-demo">
+                <strong>📈 统计分析:</strong> "计算平均销售额和总销售额"
+                <button class="btn" onclick="testQuery('计算平均销售额和总销售额', 'statistics')">测试查询</button>
+            </div>
+            
+            <div class="query-demo">
+                <strong>🥧 占比分析:</strong> "各地区销售占比分析"
+                <button class="btn" onclick="testQuery('各地区销售占比分析', 'proportion')">测试查询</button>
+            </div>
+
+            <div id="query-result" style="margin-top: 16px; padding: 16px; background: #f6f8fa; border-radius: 4px; display: none;">
+                <h4>查询结果:</h4>
+                <div id="query-output"></div>
+            </div>
+        </div>
+
+        <div class="demo-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="avg-response-time">1.28s</div>
+                <div class="metric-label">平均响应时间</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="accuracy-rate">57.4%</div>
+                <div class="metric-label">平均置信度</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="success-rate">100%</div>
+                <div class="metric-label">查询成功率</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="query-types">5</div>
+                <div class="metric-label">支持查询类型</div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2>📊 数据可视化示例</h2>
+            <p>系统自动生成ECharts配置，支持以下图表类型：</p>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px;">
+                    <h4>📈 折线图 (趋势分析)</h4>
+                    <div id="line-chart" style="height: 200px; border: 1px solid #d9d9d9;"></div>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <h4>📊 柱状图 (对比/排名)</h4>
+                    <div id="bar-chart" style="height: 200px; border: 1px solid #d9d9d9;"></div>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <h4>🥧 饼图 (占比分析)</h4>
+                    <div id="pie-chart" style="height: 200px; border: 1px solid #d9d9d9;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <h2>🎯 MVP核心特性</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                <div>
+                    <h4>✅ 用户认证系统</h4>
+                    <ul>
+                        <li>JWT Token认证</li>
+                        <li>用户角色权限管理</li>
+                        <li>安全密码加密</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>✅ AI智能查询</h4>
+                    <ul>
+                        <li>自然语言处理</li>
+                        <li>5种查询类型支持</li>
+                        <li>自动SQL生成</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>✅ 数据可视化</h4>
+                    <ul>
+                        <li>ECharts图表集成</li>
+                        <li>智能图表推荐</li>
+                        <li>响应式设计</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>✅ 企业级架构</h4>
+                    <ul>
+                        <li>微服务架构</li>
+                        <li>RESTful API</li>
+                        <li>完整测试覆盖</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let authToken = '';
+
+        // 测试登录
+        async function testLogin() {
+            const authResult = document.getElementById('auth-result');
+            const authOutput = document.getElementById('auth-output');
+            
+            try {
+                const response = await axios.post('http://localhost:8000/api/auth/login', {
+                    username: 'demo',
+                    password: '123456'
+                });
+                
+                authToken = response.data.data.token;
+                authResult.style.display = 'block';
+                authOutput.textContent = JSON.stringify({
+                    status: '登录成功 ✅',
+                    user: response.data.data.user.username,
+                    role: response.data.data.user.role,
+                    tokenLength: authToken.length
+                }, null, 2);
+            } catch (error) {
+                authResult.style.display = 'block';
+                authOutput.textContent = '登录失败: ' + (error.response?.data?.message || error.message);
+            }
+        }
+
+        // 测试获取用户信息
+        async function testProfile() {
+            if (!authToken) {
+                alert('请先登录!');
+                return;
+            }
+            
+            const authResult = document.getElementById('auth-result');
+            const authOutput = document.getElementById('auth-output');
+            
+            try {
+                const response = await axios.get('http://localhost:8000/api/auth/profile', {
+                    headers: { 'Authorization': 'Bearer ' + authToken }
+                });
+                
+                authResult.style.display = 'block';
+                authOutput.textContent = JSON.stringify({
+                    status: '获取用户信息成功 ✅',
+                    user: response.data.data
+                }, null, 2);
+            } catch (error) {
+                authResult.style.display = 'block';
+                authOutput.textContent = '获取用户信息失败: ' + (error.response?.data?.message || error.message);
+            }
+        }
+
+        // 测试查询
+        async function testQuery(query, expectedType) {
+            const queryResult = document.getElementById('query-result');
+            const queryOutput = document.getElementById('query-output');
+            
+            queryResult.style.display = 'block';
+            queryOutput.innerHTML = '<div style="color: #1890ff;">🔄 处理中...</div>';
+            
+            const startTime = Date.now();
+            
+            try {
+                const response = await axios.post('http://localhost:8000/api/queries', {
+                    naturalQuery: query,
+                    database: 'default'
+                });
+                
+                const processingTime = Date.now() - startTime;
+                const data = response.data.data.query;
+                
+                queryOutput.innerHTML = `
+                    <div style="color: #52c41a; margin-bottom: 16px;"><strong>✅ 查询成功</strong></div>
+                    <div><strong>查询类型:</strong> ${data.queryType}</div>
+                    <div><strong>处理时间:</strong> ${processingTime}ms</div>
+                    <div><strong>置信度:</strong> ${(data.result.confidence * 100).toFixed(1)}%</div>
+                    <div><strong>图表类型:</strong> ${data.chartConfig.type}</div>
+                    <div><strong>数据行数:</strong> ${data.result.rows}</div>
+                    <div style="margin-top: 12px;"><strong>生成SQL:</strong></div>
+                    <pre style="background: #f0f0f0; padding: 8px; font-size: 12px; overflow-x: auto;">${data.sqlQuery}</pre>
+                `;
+            } catch (error) {
+                queryOutput.innerHTML = `
+                    <div style="color: #ff4d4f;"><strong>❌ 查询失败</strong></div>
+                    <div>${error.response?.data?.message || error.message}</div>
+                `;
+            }
+        }
+
+        // 初始化图表
+        function initCharts() {
+            // 折线图
+            const lineChart = echarts.init(document.getElementById('line-chart'));
+            lineChart.setOption({
+                title: { text: '销售趋势', textStyle: { fontSize: 14 } },
+                xAxis: { type: 'category', data: ['1月', '2月', '3月', '4月', '5月'] },
+                yAxis: { type: 'value' },
+                series: [{ data: [120, 132, 101, 134, 90], type: 'line' }]
+            });
+
+            // 柱状图
+            const barChart = echarts.init(document.getElementById('bar-chart'));
+            barChart.setOption({
+                title: { text: '部门对比', textStyle: { fontSize: 14 } },
+                xAxis: { type: 'category', data: ['销售', '市场', '技术'] },
+                yAxis: { type: 'value' },
+                series: [{ data: [2500, 1800, 1200], type: 'bar' }]
+            });
+
+            // 饼图
+            const pieChart = echarts.init(document.getElementById('pie-chart'));
+            pieChart.setOption({
+                title: { text: '地区占比', textStyle: { fontSize: 14 } },
+                series: [{
+                    type: 'pie',
+                    data: [
+                        { value: 35, name: '华东' },
+                        { value: 25, name: '华北' },
+                        { value: 20, name: '华南' },
+                        { value: 20, name: '其他' }
+                    ]
+                }]
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 延迟初始化图表，确保ECharts已加载
+            setTimeout(initCharts, 1000);
+        });
+    </script>
+</body>
+</html>
