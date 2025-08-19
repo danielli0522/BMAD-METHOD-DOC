@@ -9,6 +9,12 @@ process.env.CONFIG_ENCRYPTION_KEY = 'test-config-encryption-key';
 process.env.DATASOURCE_CONFIG_FILE = './tests/fixtures/test-datasources.json';
 process.env.UPLOAD_DIR = './tests/fixtures/uploads/';
 
+// 权限系统测试环境变量
+process.env.REDIS_URL = 'redis://localhost:6379/15';
+process.env.PERMISSION_CACHE_ENABLED = 'true';
+process.env.PERMISSION_CACHE_TTL = '300';
+process.env.PERMISSION_LONG_CACHE_TTL = '600';
+
 // 全局测试超时
 jest.setTimeout(30000);
 
@@ -48,6 +54,18 @@ afterAll(async () => {
     } catch (error) {
       // 忽略清理错误
     }
+  }
+
+  // 清理数据库连接和Redis连接
+  if (global.mockServices) {
+    if (global.mockServices.redis) {
+      await global.mockServices.redis.quit();
+    }
+  }
+  
+  // 强制垃圾回收
+  if (global.gc) {
+    global.gc();
   }
 });
 

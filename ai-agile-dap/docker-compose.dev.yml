@@ -1,0 +1,256 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: ai-agile-dap-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: dev_root_password
+      MYSQL_DATABASE: ai_agile_dap_dev
+      MYSQL_USER: dev_user
+      MYSQL_PASSWORD: dev_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - ai-agile-dap-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+
+  # Redis缓存
+  redis:
+    image: redis:7-alpine
+    container_name: ai-agile-dap-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - ai-agile-dap-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 5s
+      retries: 5
+      interval: 10s
+
+  # MinIO对象存储
+  minio:
+    image: minio/minio:latest
+    container_name: ai-agile-dap-minio
+    environment:
+      MINIO_ROOT_USER: dev_access_key
+      MINIO_ROOT_PASSWORD: dev_secret_key
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - ai-agile-dap-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      timeout: 5s
+      retries: 5
+      interval: 30s
+
+  # AI引擎服务
+  ai-engine:
+    build:
+      context: ./src/ai-engine
+      dockerfile: Dockerfile.dev
+    container_name: ai-agile-dap-ai-engine
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=gpt-4
+      - LOG_LEVEL=DEBUG
+      - ENABLE_CACHE=true
+      - CACHE_TTL_SECONDS=3600
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./src/ai-engine:/app
+      - ai_engine_cache:/app/.cache
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - ai-agile-dap-network
+    develop:
+      watch:
+        - action: sync
+          path: ./src/ai-engine
+          target: /app
+          ignore:
+            - __pycache__/
+            - .pytest_cache/
+        - action: rebuild
+          path: ./src/ai-engine/requirements.txt
+
+  # 后端服务
+  backend:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile.dev
+    container_name: ai-agile-dap-backend
+    environment:
+      - NODE_ENV=development
+      - PORT=8000
+      - DATABASE_URL=mysql://dev_user:dev_password@mysql:3306/ai_agile_dap_dev
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=dev_jwt_secret_key_12345
+      - LOG_LEVEL=debug
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src/backend:/app
+      - backend_node_modules:/app/node_modules
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ai-agile-dap-network
+    develop:
+      watch:
+        - action: sync
+          path: ./src/backend
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: ./src/backend/package.json
+
+  # 前端服务
+  frontend:
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile.dev
+    container_name: ai-agile-dap-frontend
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8000
+      - VITE_AI_ENGINE_URL=http://localhost:8001
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src/frontend:/app
+      - frontend_node_modules:/app/node_modules
+    networks:
+      - ai-agile-dap-network
+    develop:
+      watch:
+        - action: sync
+          path: ./src/frontend
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: ./src/frontend/package.json
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: ai-agile-dap-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx/dev.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/certs:/etc/nginx/certs
+    depends_on:
+      - frontend
+      - backend
+      - ai-engine
+    networks:
+      - ai-agile-dap-network
+
+  # 监控服务 - Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ai-agile-dap-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - ai-agile-dap-network
+
+  # 监控服务 - Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ai-agile-dap-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=dev_grafana_password
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+      - ./config/grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus
+    networks:
+      - ai-agile-dap-network
+
+  # 日志聚合 - Elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: ai-agile-dap-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - ai-agile-dap-network
+
+  # 日志聚合 - Kibana
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: ai-agile-dap-kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - ai-agile-dap-network
+
+volumes:
+  mysql_data:
+  redis_data:
+  minio_data:
+  ai_engine_cache:
+  backend_node_modules:
+  frontend_node_modules:
+  prometheus_data:
+  grafana_data:
+  elasticsearch_data:
+
+networks:
+  ai-agile-dap-network:
+    driver: bridge

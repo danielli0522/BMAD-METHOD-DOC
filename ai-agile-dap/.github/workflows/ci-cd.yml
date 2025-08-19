@@ -1,0 +1,327 @@
+name: AI-Agile-DAP CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  NODE_VERSION: '20.x'
+  PYTHON_VERSION: '3.9'
+  MYSQL_VERSION: '8.0'
+
+jobs:
+  # 代码质量检查
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality Check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+    
+    - name: Install frontend dependencies
+      run: |
+        cd src/frontend && npm ci
+    
+    - name: Install backend dependencies
+      run: |
+        cd src/backend && npm ci
+    
+    - name: Install AI engine dependencies
+      run: |
+        cd src/ai-engine && pip install -r requirements.txt
+    
+    - name: ESLint check
+      run: |
+        cd src/frontend && npm run lint
+        cd src/backend && npm run lint
+    
+    - name: Python code formatting
+      run: |
+        cd src/ai-engine && python -m black --check .
+        cd src/ai-engine && python -m flake8 .
+    
+    - name: TypeScript type check
+      run: |
+        cd src/frontend && npm run type-check
+        cd src/backend && npm run type-check
+
+  # 单元测试
+  unit-tests:
+    runs-on: ubuntu-latest
+    name: Unit Tests
+    needs: code-quality
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: ai_agile_dap_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        cd src/frontend && npm ci
+        cd src/backend && npm ci
+        cd src/ai-engine && pip install -r requirements.txt
+    
+    - name: Frontend tests
+      run: |
+        cd src/frontend && npm run test:coverage
+    
+    - name: Backend tests
+      env:
+        DATABASE_URL: mysql://root:test_password@localhost:3306/ai_agile_dap_test
+        REDIS_URL: redis://localhost:6379
+      run: |
+        cd src/backend && npm run test:coverage
+    
+    - name: AI Engine tests
+      env:
+        OPENAI_API_KEY: test_key_placeholder
+      run: |
+        cd src/ai-engine && python -m pytest tests/ --cov=. --cov-report=xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./coverage/
+        fail_ci_if_error: true
+
+  # 安全扫描
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scan
+    needs: code-quality
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    
+    - name: NPM audit
+      run: |
+        cd src/frontend && npm audit --audit-level=high
+        cd src/backend && npm audit --audit-level=high
+    
+    - name: Python security check
+      run: |
+        pip install safety bandit
+        cd src/ai-engine && safety check -r requirements.txt
+        cd src/ai-engine && bandit -r . -f json -o bandit-report.json
+    
+    - name: CodeQL Analysis
+      uses: github/codeql-action/init@v2
+      with:
+        languages: javascript, python
+    
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+  # Docker镜像构建
+  build-images:
+    runs-on: ubuntu-latest
+    name: Build Docker Images
+    needs: [unit-tests, security-scan]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Login to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: |
+          ghcr.io/${{ github.repository }}/frontend
+          ghcr.io/${{ github.repository }}/backend
+          ghcr.io/${{ github.repository }}/ai-engine
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix=sha-
+    
+    - name: Build and push Frontend image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./src/frontend
+        push: true
+        tags: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    
+    - name: Build and push Backend image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./src/backend
+        push: true
+        tags: ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    
+    - name: Build and push AI Engine image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./src/ai-engine
+        push: true
+        tags: ghcr.io/${{ github.repository }}/ai-engine:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # 部署到开发环境
+  deploy-dev:
+    runs-on: ubuntu-latest
+    name: Deploy to Development
+    needs: build-images
+    if: github.ref == 'refs/heads/develop'
+    environment: development
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to development cluster
+      run: |
+        echo "Deploying to development environment..."
+        # 实际部署逻辑
+        # kubectl apply -f k8s/development/
+    
+    - name: Run integration tests
+      run: |
+        echo "Running integration tests..."
+        # 集成测试逻辑
+    
+    - name: Notify deployment status
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      if: always()
+
+  # 部署到生产环境
+  deploy-prod:
+    runs-on: ubuntu-latest
+    name: Deploy to Production
+    needs: build-images
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to production cluster
+      run: |
+        echo "Deploying to production environment..."
+        # 实际部署逻辑
+        # kubectl apply -f k8s/production/
+    
+    - name: Run smoke tests
+      run: |
+        echo "Running smoke tests..."
+        # 冒烟测试逻辑
+    
+    - name: Notify deployment status
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      if: always()
+
+  # 性能测试
+  performance-test:
+    runs-on: ubuntu-latest
+    name: Performance Testing
+    needs: deploy-dev
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup k6
+      run: |
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+        echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+        sudo apt-get update
+        sudo apt-get install k6
+    
+    - name: Run performance tests
+      run: |
+        k6 run tests/performance/api-load-test.js
+        k6 run tests/performance/ai-engine-stress-test.js
+    
+    - name: Upload performance results
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-results
+        path: ./performance-results/

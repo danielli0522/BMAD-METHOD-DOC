@@ -34,13 +34,18 @@ module.exports = {
   },
 
   // 设置文件
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/setup.js'],
 
   // 模块路径映射
   moduleNameMapping: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^@tests/(.*)$': '<rootDir>/tests/$1',
+    '^@/(.*)$': '<rootDir>/../src/$1',
+    '^@tests/(.*)$': '<rootDir>/$1',
   },
+  
+  // 内存管理
+  detectOpenHandles: false,
+  forceExit: true,
+  detectLeaks: false,
 
   // 忽略的路径
   testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/dist/'],

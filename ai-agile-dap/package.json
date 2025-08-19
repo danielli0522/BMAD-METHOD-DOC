@@ -1,0 +1,60 @@
+{
+  "name": "ai-agile-dap",
+  "version": "1.0.0",
+  "description": "AI驱动的零门槛企业数据洞察平台",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run dev:frontend & npm run dev:backend",
+    "dev:frontend": "cd src/frontend && npm run dev",
+    "dev:backend": "cd src/backend && npm run dev",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd src/frontend && npm run build",
+    "build:backend": "cd src/backend && npm run build",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "cd src && npm run test:unit",
+    "test:integration": "cd tests && npm run test:integration",
+    "test:e2e": "cd tests && npm run test:e2e",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "install:all": "npm install && cd src/frontend && npm install && cd ../backend && pip install -r requirements.txt"
+  },
+  "keywords": [
+    "ai",
+    "data-analysis",
+    "business-intelligence",
+    "natural-language",
+    "data-visualization",
+    "enterprise",
+    "dashboard",
+    "reports"
+  ],
+  "author": "ai-agile-dap team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ai-agile-dap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/ai-agile-dap/issues"
+  },
+  "homepage": "https://github.com/yourusername/ai-agile-dap#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.0",
+    "prettier": "^3.0.0"
+  },
+  "workspaces": [
+    "src/frontend",
+    "src/backend"
+  ]
+}
